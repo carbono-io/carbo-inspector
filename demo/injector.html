@@ -1,0 +1,57 @@
+<html>
+<head>
+    <title></title>
+
+    <link rel="import" href="../bower_components/polymer/polymer.html">
+
+    <style type="text/css">
+
+        #one {
+            background-color: darkred;
+            color: white;
+
+            height: 300px;
+        }
+
+        #two {
+            background-color: darkgreen;
+            color: white;
+
+            width: 400px;
+            height: 300px;
+
+            position: relative;
+        }
+
+        #two-inner {
+            position: absolute;
+
+            bottom: 50%;
+            right: 40%;
+
+            padding: 30px 30px;
+
+            background-color: navy;
+        }
+
+    </style>
+
+</head>
+<body>
+    <h1>test title</h1>
+    <div id="one">
+        content
+
+        <div>text content</div>
+    </div>
+    <div id="two">
+        second content
+
+        <div id="two-inner">inner</div>
+    </div>
+
+    <div id="control"></div>
+
+    <script type="text/javascript" src="../injector.js"></script>
+</body>
+</html>

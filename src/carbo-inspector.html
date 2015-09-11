@@ -1,0 +1,24 @@
+<!-- <link rel="import" href="../polymer/polymer.html">
+ -->
+<dom-module id="carbo-inspector">
+    
+    <link rel="import" type="css" href="carbo-inspector.css">
+
+    <template>
+        <div id="highlighter">
+            <div id="elementlabel">body</div>
+        </div>
+    </template>
+
+    <script src="../lodash/lodash.js"></script>
+    <script src="carbo-inspector.js"></script>
+
+</dom-module>
+
+<!--
+ele está pegando sempre o highlighter no mouse over pq é o elemento que está mais em cima.
+possíveis soluções:
+- element from point ver como funciona -  excessão de uma div para ele pegar como element (highlighter no caso)
+- colocar o highlighter para fora do document?
+- inserir o highlighter como o primeiro filho do elemento maior - entre ele e os outros elementos filhos
+-->

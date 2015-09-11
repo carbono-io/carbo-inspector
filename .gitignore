@@ -1,0 +1,8 @@
+bower_components
+node_modules
+
+# Generated stylesheets
+src/**/*.css
+
+# Temporary files used for vulcanization
+tmp

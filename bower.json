@@ -1,0 +1,17 @@
+{
+  "name": "carbo-inspector",
+  "version": "0.0.0",
+  "authors": [],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "carbo-inspector",
+    "carbo-inspectors"
+  ],
+  "dependencies": {
+    "lodash": "~3.10.1",
+    "polymer": "~1.1.2"
+  }
+}
