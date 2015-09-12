@@ -15,14 +15,14 @@
     /**
      * List of operations that can be called via window.postMessage
      * from the outer world.
-     * @type {Array}
+     * @type {Object}
      */
-    var OPERATION_WHITELIST = [
-        'highlightElementAtPoint',
-        'unHighlight',
-        'getActiveElementData',
-        'scrollBy'
-    ];
+    var OPERATION_WHITELIST = {
+        'highlightElementAtPoint': true,
+        'unHighlight': true,
+        'getActiveElementData': true,
+        'scrollBy': true
+    };
 
     /**
      * Style properties to be mimiced by the highlighter element
@@ -142,13 +142,8 @@
             // Check if the operationName is whitelisted
             // Not all methods on the inspector object should be
             // available for outside use for security reasons.
-            // Thus we should whitelist the available methods.
-            // 
-            // (_.any returns true if ANY of the items in the array
-            // results in a true evaluation from the condition)
-            var operationWhitelisted = _.any(OPERATION_WHITELIST, function (op) {
-                return op === request.operation;
-            });
+            // Thus we should whitelist the available methods
+            var operationWhitelisted = OPERATION_WHITELIST[request.operation]; 
 
             if (operationWhitelisted) {
                 // Execute the operation and store the result
@@ -214,8 +209,6 @@
 
             // Save the element to the active element
             this.activeElement = element;
-
-            console.log(element);
 
             // Get element tag name
             var elementLabelName = element.tagName;

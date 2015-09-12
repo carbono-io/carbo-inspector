@@ -1,0 +1,71 @@
+<html>
+<head>
+    <title></title>
+
+    <style type="text/css">
+        #canvas {
+            width: 350px;
+            height: 600px;
+
+            border: 3px white dashed;
+
+            position: relative;
+
+            background-color: navy;
+        }
+
+        #iframe {
+            position: absolute;
+
+            width: 100%;
+            height: 100%;
+
+            border: none;
+        }
+
+        #overlay {
+            position: absolute;
+
+            top: 0px;
+            bottom: 0px;
+            left: 0px;
+            right: 0px;
+
+            z-index: 1;
+
+            background-color: darkred;
+
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="canvas">
+        <iframe id="iframe" src="iframe.html"></iframe>
+        <!-- <div id="overlay"></div> -->
+    </div>
+
+
+    <script type="text/javascript">
+
+        window.addEventListener('WebComponentsReady', function () {
+            
+            window.inspector = document.getElementById('inspector');
+
+            var twoInner = document.getElementById('two-inner');
+
+            inspector.highlight(twoInner);
+        });
+
+        var overlay = document.getElementById('overlay');
+        overlay.addEventListener('mousemove', function (e) {
+            console.log(e);
+        });
+
+        function sendMessageToIframe() {
+            
+        }
+    </script>
+</body>
+</html>

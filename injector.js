@@ -16,5 +16,5 @@
         console.log('errror')
     }
 
-    Polymer.Base.importHref('../src/carbo-inspector.html', onInspectorLoad, onInspectorLoadError);
+    Polymer.Base.importHref('/assets/injected/carbo-inspector.html', onInspectorLoad, onInspectorLoadError);
 })();

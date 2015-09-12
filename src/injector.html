@@ -1,0 +1,18 @@
+<!-- 
+    All this html does is 
+    to add a script tag to the end of the carbo-inspector.html 
+    component in order to inject a <carbo-inspector></carbo-inspector>
+    element inside the document.
+-->
+
+<script>
+(function () {
+
+    // Set the carboInspector global
+    var carboInspector = window.carboInspector = document.createElement('carbo-inspector');
+
+    // Append it to the body
+    document.body.appendChild(carboInspector);
+
+})();
+</script>

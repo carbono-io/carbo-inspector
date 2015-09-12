@@ -2,6 +2,15 @@
 <head>
     <title></title>
 
+    <script>
+        window.Polymer = window.Polymer || {};
+        window.Polymer.dom = 'shadow';
+    </script>
+    <script type="text/javascript" src="../bower_components/webcomponentsjs/webcomponents-lite.js">
+    </script>
+
+    <link rel="import" href="../bower_components/polymer/polymer.html">
+
     <link rel="import" href="../carbo-inspector.html">
 
     <style type="text/css">
@@ -56,11 +65,15 @@
     <div id="control"></div>
 
     <script type="text/javascript">
+
+    window.addEventListener('WebComponentsReady', function () {
+        
         window.inspector = document.getElementById('inspector');
 
         var twoInner = document.getElementById('two-inner');
 
         inspector.highlight(twoInner);
+    });
     </script>
 </body>
 </html>
