@@ -2,7 +2,7 @@ bower_components
 node_modules
 
 # Generated stylesheets
-src/**/*.css
+src/**/*-styles.html
 
 # Temporary files used for vulcanization
 tmp

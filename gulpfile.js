@@ -91,7 +91,7 @@ gulp.task('_clean', function _clean() {
 /**
  * Prepares components for vulcanization
  */
-gulp.task('_tmp', ['_clean'], function _tmp() {
+gulp.task('_tmp', ['_clean', 'less'], function _tmp() {
 
     var copySRC = gulp.src(SRC_DIR + '/*')
         .pipe($.rename(function (p) {
@@ -146,7 +146,15 @@ gulp.task('less', function less() {
             ],
             cascade: false,
         }))
-        // .pipe($.minifyCss())
+        .pipe($.polymerizeCss({
+            styleId: function (file) {
+                return path.basename(file.path, '.css') + '-styles';
+            }
+        }))
+        .pipe($.rename(function (path) {
+            path.basename += '-styles';
+            path.extname = '.html';
+        }))
         // Put files at source dir in order to use them for vulcanization
         .pipe(gulp.dest(SRC_DIR))
         .pipe($.size({ title: 'less' }));
@@ -157,7 +165,7 @@ gulp.task('less', function less() {
  * We need the temporary directory to run vulcanize
  * as the routes we use in development are virtual
  */
-gulp.task('vulcanize:component', ['less', '_tmp'], function vulcanize() {
+gulp.task('vulcanize:component', ['_tmp'], function vulcanize() {
     return gulp.src(VULCANIZE_OPTIONS.componentPath)
         .pipe(vulcanizePipe())
         .pipe(gulp.dest('.'))
@@ -167,7 +175,7 @@ gulp.task('vulcanize:component', ['less', '_tmp'], function vulcanize() {
 /**
  * Adds the injection script to the component
  */
-gulp.task('vulcanize:injector', ['less', '_tmp'], function () {
+gulp.task('vulcanize:injector', ['_tmp'], function () {
 
     return gulp.src([VULCANIZE_OPTIONS.componentPath, VULCANIZE_OPTIONS.injectorPath])
         .pipe($.concat('carbo-inspector.injector.html'))
@@ -221,7 +229,10 @@ gulp.task('watch', function () {
     // gulp.watch(LESS_DIR, ['less']);
 
     // Any source files that change should trigger vulcanize injector
-    gulp.watch(SRC_DIR + '/**/*', ['vulcanize:injector']);
+    gulp.watch([
+        SRC_DIR + '/**/*',
+        '!' + SRC_DIR + '/**/*-styles.html'
+    ], ['vulcanize']);
 
     // Reload
     var reloadDirs = JS_DIR.concat(CSS_DIR).concat(HTML_DIR).concat(['carbo-inspector.injector.html']);
