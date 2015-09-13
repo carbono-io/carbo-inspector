@@ -1,15 +1,41 @@
-<html><head><meta charset="UTF-8"><link rel="import" href="../polymer/polymer.html">
-</head><body><div hidden="" by-vulcanize=""><dom-module id="carbo-inspector-styles" assetpath="/"><template><style>#highlighter {visibility: hidden;opacity: 0;position: fixed;border: 3px red solid;z-index: 1000;box-sizing: border-box;pointer-events: none;transition: top ease 0.1s, left ease 0.1s, height ease 0.1s, width ease 0.1s, border-top-left-radius ease 0.1s, border-top-right-radius ease 0.1s, border-bottom-left-radius ease 0.1s, border-bottom-right-radius ease 0.1s, opacity ease 0.4s, visibility 0s 0.4s;}#highlighter.show {visibility: visible;opacity: 1;transition: top ease 0.1s, left ease 0.1s, height ease 0.1s, width ease 0.1s, border-top-left-radius ease 0.1s, border-top-right-radius ease 0.1s, border-bottom-left-radius ease 0.1s, border-bottom-right-radius ease 0.1s, opacity ease 0.4s, visibility 0s 0s;}#highlighter #elementlabel {position: absolute;font-size: 10px;line-height: 14px;color: white;background-color: red;height: 14px;padding: 2px 4px;margin-top: -20px;margin-left: -3px;}</style></template></dom-module></div><dom-module id="carbo-inspector">
+<html><head><link rel="import" href="../polymer/polymer.html">
+<meta charset="UTF-8"></head><body><div hidden="" by-vulcanize=""><div hidden="" by-vulcanize=""><dom-module id="carbo-highlighter-styles" assetpath="/"><template><style>#wrapper {visibility: hidden;opacity: 0;position: fixed;z-index: 1000;transition: top ease 0.1s, left ease 0.1s, height ease 0.1s, width ease 0.1s, border-top-left-radius ease 0.1s, border-top-right-radius ease 0.1s, border-bottom-left-radius ease 0.1s, border-bottom-right-radius ease 0.1s, opacity ease 0.4s, visibility 0s 0.4s;}#wrapper.show {visibility: visible;opacity: 1;transition: top ease 0.1s, left ease 0.1s, height ease 0.1s, width ease 0.1s, border-top-left-radius ease 0.1s, border-top-right-radius ease 0.1s, border-bottom-left-radius ease 0.1s, border-bottom-right-radius ease 0.1s, opacity ease 0.4s, visibility 0s 0s;}#wrapper .container {position: absolute;}#wrapper .x-axis {left: 0;right: 0;}#wrapper .y-axis {top: 0;bottom: 0;}#top {top: 0;-webkit-transform: translateY(-100%);transform: translateY(-100%);}#bottom {bottom: 0;-webkit-transform: translateY(100%);transform: translateY(100%);}#left {left: 0;-webkit-transform: translateX(-100%);transform: translateX(-100%);}#right {right: 0;-webkit-transform: translateX(100%);transform: translateX(100%);}#surface {top: 0;bottom: 0;left: 0;right: 0;border: 3px red solid;box-sizing: border-box;background-color: green;}</style></template></dom-module></div><dom-module id="carbo-highlighter" assetpath="../carbo-highlighter/">
+    <style include="carbo-highlighter-styles"></style>
+
+    <template>
+
+        <div id="wrapper">
+            <div id="top" class="container x-axis">
+                <content select="[position='top']"></content>
+            </div>
+            <div id="bottom" class="container x-axis">
+                <content select="[position='bottom']"></content>
+            </div>
+            <div id="left" class="container y-axis">
+                <content select="[position='left']"></content>
+            </div>
+            <div id="right" class="container y-axis">
+                <content select="[position='right']"></content>
+            </div>
+            <div id="surface" class="container">
+                <content select="[position='center']"></content>
+            </div>
+        </div>
+
+    </template>
+
+    <script>!function(){var t=["border-top-left-radius","border-top-right-radius","border-bottom-left-radius","border-bottom-right-radius"],e={getComputedStyle:function(t){if(!t)throw new Error("No element for getComputedStyle(element)");for(var e={},r=window.getComputedStyle(t),i=r.length-1;i>=0;i--){var o=r[i];e[o]=r.getPropertyValue(o)}return e},getAttributes:function(t){if(!t)throw new Error("No element for getAttributes(element)");for(var e={},r=t.attributes,i=r.length-1;i>=0;i--)e[r[i].name]=r[i].value;return e}};Polymer({is:"carbo-highlighter",properties:{element:{type:Object,notify:!0}},ready:function(){this.element&&this.highlight(this.element,!0)},highlight:function(r,i){if(!r)throw new Error("No element for highlight(element)");if(this.element!==r||i){this.element&&this.unHighlight(this.element),this.element=r;var o=this.$.wrapper,h=r.getBoundingClientRect();this.toggleClass("show",!0,o),o.style.left=h.left+"px",o.style.top=h.top+"px",o.style.width=h.width+"px",o.style.height=h.height+"px";var l=e.getComputedStyle(r),n=this.$.surface;t.forEach(function(t){l[t]&&(n.style[t]=l[t])})}},unHighlight:function(){var e=this.$.wrapper;this.toggleClass("show",!1,e),t.forEach(function(t){delete e.style[t]}),delete this.element}})}();</script>
+</dom-module><dom-module id="carbo-inspector-styles" assetpath="/"><template><style>#elementlabel {font-size: 10px;line-height: 14px;color: white;background-color: darkred;height: 14px;padding: 2px 4px;}</style></template></dom-module></div><dom-module id="carbo-inspector">
     
     <style include="carbo-inspector-styles"></style>
 
     <template>
-        <div id="highlighter">
-            <div id="elementlabel"></div>
-        </div>
+        <carbo-highlighter id="focus">
+            <div id="elementlabel" position="top"></div>
+        </carbo-highlighter>
     </template>
     
-    <script>!function(){var t={highlightElementAtPoint:!0,unHighlight:!0,getActiveElementData:!0,scrollBy:!0},e=["border-top-left-radius","border-top-right-radius","border-bottom-left-radius","border-bottom-right-radius"],i={getComputedStyle:function(t){if(!t)throw new Error("No element for getComputedStyle(element)");for(var e={},i=window.getComputedStyle(t),n=i.length-1;n>=0;n--){var r=i[n];e[r]=i.getPropertyValue(r)}return e},getAttributes:function(t){if(!t)throw new Error("No element for getAttributes(element)");for(var e={},i=t.attributes,n=i.length-1;n>=0;n--)e[i[n].name]=i[n].value;return e}};Polymer({is:"carbo-inspector",ready:function(){window.addEventListener("message",this.handleFrameRequestMessage.bind(this),!1),document.addEventListener("mouseout",function(t){var e=t.relatedTarget||t.toElement;e&&"HTML"!=e.nodeName||this.unHighlight()}.bind(this))},handleFrameRequestMessage:function(e){var i=JSON.parse(e.data),n=t[i.operation];if(!n)throw new Error("Operation %s is not available at inspector",operationName);var r=this[i.operation].apply(this,i.args);parent.postMessage(JSON.stringify({id:i.id,res:r}),"*")},getActiveElementData:function(){var t=this.activeElement,e=t.getBoundingClientRect(),n={tagName:t.tagName,attributes:i.getAttributes(t),computedStyle:i.getComputedStyle(t),rect:{top:e.top,left:e.left,width:e.width,height:e.height}};return n},highlight:function(t,n){if(!t)throw new Error("No element for highlight(element)");if(this.activeElement!==t||n){this.activeElement&&this.unHighlight(this.activeElement),this.activeElement=t;var r=t.tagName,o=this.$.elementlabel;o.innerHTML=r;var h=this.$.highlighter,l=t.getBoundingClientRect();this.toggleClass("show",!0,h),h.style.left=l.left+"px",h.style.top=l.top+"px",h.style.width=l.width+"px",h.style.height=l.height+"px";var a=i.getComputedStyle(t);e.forEach(function(t){a[t]&&(h.style[t]=a[t])})}},unHighlight:function(){var t=this.$.highlighter;this.toggleClass("show",!1,t),e.forEach(function(e){delete t.style[e]})},highlightElementAtPoint:function(t,e){var i=document.elementFromPoint(t.x,t.y);i===this&&this.unHighlight(),this.highlight(i,e)},scrollBy:function(t,e){window.scrollBy(t,e)}})}();</script>
+    <script>!function(){var t={highlightElementAtPoint:!0,unHighlight:!0,getActiveElementData:!0,scrollBy:!0},e={getComputedStyle:function(t){if(!t)throw new Error("No element for getComputedStyle(element)");for(var e={},i=window.getComputedStyle(t),n=i.length-1;n>=0;n--){var r=i[n];e[r]=i.getPropertyValue(r)}return e},getAttributes:function(t){if(!t)throw new Error("No element for getAttributes(element)");for(var e={},i=t.attributes,n=i.length-1;n>=0;n--)e[i[n].name]=i[n].value;return e}};Polymer({is:"carbo-inspector",ready:function(){window.addEventListener("message",this.handleFrameRequestMessage.bind(this),!1),document.addEventListener("mouseout",function(t){var e=t.relatedTarget||t.toElement;e&&"HTML"!=e.nodeName||this.unHighlight()}.bind(this))},handleFrameRequestMessage:function(e){var i=JSON.parse(e.data),n=t[i.operation];if(!n)throw new Error("Operation %s is not available at inspector",operationName);var r=this[i.operation].apply(this,i.args);parent.postMessage(JSON.stringify({id:i.id,res:r}),"*")},getActiveElementData:function(){var t=this.activeElement,i=t.getBoundingClientRect(),n={tagName:t.tagName,attributes:e.getAttributes(t),computedStyle:e.getComputedStyle(t),rect:{top:i.top,left:i.left,width:i.width,height:i.height}};return n},highlight:function(t,e){this.$.focus.highlight(t,e);var i=t.tagName,n=this.$.elementlabel;n.innerHTML=i},unHighlight:function(){this.$.focus.unHighlight()},highlightElementAtPoint:function(t,e){var i=document.elementFromPoint(t.x,t.y);i===this&&this.unHighlight(),this.highlight(i,e)},scrollBy:function(t,e){window.scrollBy(t,e)}})}();</script>
 
 </dom-module>
 

@@ -25,17 +25,6 @@
     };
 
     /**
-     * Style properties to be mimiced by the highlighter element
-     * @type {Array}
-     */
-    var MIMIC_STYLES = [
-        'border-top-left-radius',
-        'border-top-right-radius',
-        'border-bottom-left-radius',
-        'border-bottom-right-radius',
-    ];
-
-    /**
      * Helper methods for manipulating DOMNodes
      * @type {Object}
      */
@@ -192,23 +181,8 @@
          * @param  {DOMNode} element The node to be highlighted
          */
         highlight: function (element, force) {
-            if (!element) {
-                throw new Error('No element for highlight(element)');
-            }
 
-            // If the new highlighted element is the same as the 
-            // currentActive one, just let it be.
-            if (this.activeElement === element && !force) {
-                return; 
-            }
-
-            // If there is an activeElement unHighlight it
-            if (this.activeElement) {
-                this.unHighlight(this.activeElement);
-            }
-
-            // Save the element to the active element
-            this.activeElement = element;
+            this.$.focus.highlight(element, force);
 
             // Get element tag name
             var elementLabelName = element.tagName;
@@ -218,33 +192,6 @@
 
             // Set value of label div
             elementLabelContainer.innerHTML = elementLabelName;
-
-            // The highlighter DOMNode
-            var highlighter = this.$.highlighter;
-            // The bounding rectangle for the element to be hightlighted
-            var rect        = element.getBoundingClientRect();
-            
-            this.toggleClass('show', true, highlighter);
-
-            // Set positions
-            highlighter.style.left   = rect.left   + 'px';
-            highlighter.style.top    = rect.top    + 'px';
-            highlighter.style.width  = rect.width  + 'px';
-            highlighter.style.height = rect.height + 'px';
-
-            // There are some styles that interfere drastically 
-            // on the positioning, such as border radius.
-            // We want to mimic those styles from 
-            // the highlighted element to the highlighter
-            var computedStyle = DOMHelpers.getComputedStyle(element);
-
-            //forEach - para cada um dos itens do array MIMIC_STYLES
-            MIMIC_STYLES.forEach(function (styleProp) {
-                if (computedStyle[styleProp]) {
-                    // Simply copy the styles
-                    highlighter.style[styleProp] = computedStyle[styleProp];
-                }
-            });
         },
 
         /**
@@ -252,14 +199,7 @@
          */
         unHighlight: function () {
 
-            var highlighter = this.$.highlighter;
-
-            this.toggleClass('show', false, highlighter);
-
-            // Unmimic styles
-            MIMIC_STYLES.forEach(function (styleProp) {
-                delete highlighter.style[styleProp];
-            });
+            this.$.focus.unHighlight();
         },
         
         /**

@@ -11,6 +11,7 @@
     "carbo-inspectors"
   ],
   "dependencies": {
+    "carbo-highlighter": "https://github.com/carbono-io/carbo-highlighter.git",
     "polymer": "~1.1.2"
   },
   "devDependencies": {

@@ -1,4 +1,5 @@
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../carbo-highlighter/carbo-highlighter.html">
 <link rel="import" href="carbo-inspector-styles.html">
 
 <dom-module id="carbo-inspector">
@@ -6,9 +7,9 @@
     <style include="carbo-inspector-styles"></style>
 
     <template>
-        <div id="highlighter">
-            <div id="elementlabel"></div>
-        </div>
+        <carbo-highlighter id="focus">
+            <div id="elementlabel" position="top"></div>
+        </carbo-highlighter>
     </template>
     
     <script src="carbo-inspector.js"></script>

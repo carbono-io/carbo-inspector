@@ -13,13 +13,8 @@ var del         = require('del');
 var runSequence = require('run-sequence');
 var mergeStream = require('merge-stream');
 
-
-var vinylSource = require('vinyl-source-stream');
 var lazypipe    = require('lazypipe');
-var gVulcanize  = require('gulp-vulcanize');
 var polyclean   = require('polyclean');
-var polybuild   = require('polybuild');
-
 
 // Load all installed gulp plugins into $
 var $           = require('gulp-load-plugins')();
@@ -67,7 +62,7 @@ var VULCANIZE_OPTIONS = {
 var vulcanizePipe = lazypipe()
     // inline html imports, scripts and css
     // also remove html comments
-    .pipe(gVulcanize, {
+    .pipe($.vulcanize, {
         excludes: VULCANIZE_OPTIONS.excludes,
         inlineScripts: true,
         inlineCss: true,
@@ -84,14 +79,14 @@ var vulcanizePipe = lazypipe()
 /**
  * Cleans resources
  */
-gulp.task('_clean', function _clean() {
+gulp.task('clean', function clean() {
     del.sync(TMP_DIR);
 });
 
 /**
  * Prepares components for vulcanization
  */
-gulp.task('_tmp', ['_clean', 'less'], function _tmp() {
+gulp.task('build-env', ['less'], function () {
 
     var copySRC = gulp.src(SRC_DIR + '/*')
         .pipe($.rename(function (p) {
@@ -120,7 +115,7 @@ gulp.task('_tmp', ['_clean', 'less'], function _tmp() {
 gulp.task('less', function less() {
 
     return gulp.src(LESS_DIR)
-        .pipe($.changed(SRC_DIR, { extension: '.css' }))
+        // .pipe($.changed(SRC_DIR, { extension: '.css' }))
         .pipe($.duration('Compiling .less files'))
         .pipe($.less())
         .on('error', $.notify.onError({
@@ -165,29 +160,29 @@ gulp.task('less', function less() {
  * We need the temporary directory to run vulcanize
  * as the routes we use in development are virtual
  */
-gulp.task('vulcanize:component', ['_tmp'], function vulcanize() {
+gulp.task('vulcanize:component', ['build-env'], function vulcanize() {
     return gulp.src(VULCANIZE_OPTIONS.componentPath)
         .pipe(vulcanizePipe())
         .pipe(gulp.dest('.'))
-        .pipe($.size({title: 'vulcanize' }));    
+        .pipe($.size({title: 'vulcanize' }));
 });
 
 /**
  * Adds the injection script to the component
  */
-gulp.task('vulcanize:injector', ['_tmp'], function () {
+gulp.task('vulcanize:injector', ['build-env'], function () {
 
     return gulp.src([VULCANIZE_OPTIONS.componentPath, VULCANIZE_OPTIONS.injectorPath])
         .pipe($.concat('carbo-inspector.injector.html'))
         .pipe(gulp.dest(VULCANIZE_OPTIONS.baseTmpPath))
         .pipe(vulcanizePipe())
         .pipe(gulp.dest('.'))
-        .pipe($.size({title: 'vulcanize:injector' }));  
+        .pipe($.size({title: 'vulcanize:injector' }));
 });
 
 // Register tasks
-gulp.task('vulcanize', function () {
-    runSequence('vulcanize:component', 'vulcanize:injector', '_clean');
+gulp.task('distribute', function () {
+    runSequence('vulcanize:component', 'vulcanize:injector', 'clean');
 });
 
 /////////////////
@@ -226,16 +221,10 @@ gulp.task('serve', function () {
 gulp.task('watch', function () {
 
     // // Watch files for changes
-    // gulp.watch(LESS_DIR, ['less']);
-
-    // Any source files that change should trigger vulcanize injector
-    gulp.watch([
-        SRC_DIR + '/**/*',
-        '!' + SRC_DIR + '/**/*-styles.html'
-    ], ['vulcanize']);
+    gulp.watch(LESS_DIR, ['less']);
 
     // Reload
-    var reloadDirs = JS_DIR.concat(CSS_DIR).concat(HTML_DIR).concat(['carbo-inspector.injector.html']);
+    var reloadDirs = JS_DIR.concat(HTML_DIR).concat(['carbo-inspector.injector.html']);
     gulp.watch(reloadDirs, browserSync.reload);
 });
 
