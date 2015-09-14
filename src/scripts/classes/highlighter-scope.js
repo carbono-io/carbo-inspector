@@ -67,7 +67,7 @@ HighlighterScope.prototype.set = function (property, value) {
  * JSON stringification
  * @return {Object}
  */
-HighlighterScope.property.toPlainObject = function () {
+HighlighterScope.prototype.toPlainObject = function () {
 
     return {
         id: this.id
