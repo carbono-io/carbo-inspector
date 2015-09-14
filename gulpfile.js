@@ -13,6 +13,11 @@ var del         = require('del');
 var runSequence = require('run-sequence');
 var mergeStream = require('merge-stream');
 
+// External dependnecies (browserify stuff)
+var browserify  = require('browserify');
+var vinylSource = require('vinyl-source-stream');
+
+
 var lazypipe    = require('lazypipe');
 var polyclean   = require('polyclean');
 
@@ -47,30 +52,8 @@ var VULCANIZE_OPTIONS = {
 
     // Path to the component injector file
     injectorPath: path.join(TMP_DIR, BOWER.name, 'injector.html'),
-
-    // Excludes
-    excludes: [
-        // Exclude polymer, as it is a common dependency
-        path.join(TMP_DIR, '/polymer/polymer.html'),
-    ],
 };
 
-
-// Build process for post-vulcanized stuff
-// Taken from polybuild.
-// https://github.com/PolymerLabs/polybuild/blob/master/index.js
-var vulcanizePipe = lazypipe()
-    // inline html imports, scripts and css
-    // also remove html comments
-    .pipe($.vulcanize, {
-        excludes: VULCANIZE_OPTIONS.excludes,
-        inlineScripts: true,
-        inlineCss: true,
-        stripComments: true
-    })
-    // remove whitespace from inline css
-    .pipe(polyclean.cleanCss)
-    .pipe(polyclean.uglifyJs);
 
 /////////////////////
 // auxiliary tasks //
@@ -86,7 +69,7 @@ gulp.task('clean', function clean() {
 /**
  * Prepares components for vulcanization
  */
-gulp.task('build-env', ['less'], function () {
+gulp.task('build-env', ['less', 'javascript'], function () {
 
     var copySRC = gulp.src(SRC_DIR + '/*')
         .pipe($.rename(function (p) {
@@ -156,11 +139,50 @@ gulp.task('less', function less() {
 });
 
 /**
+ * 
+ */
+gulp.task('javascript', function () {
+    // set up the browserify instance on a task basis
+    var b = browserify({
+        entries: SRC_DIR + '/carbo-inspector.js',
+        debug: true
+    });
+
+    return b.bundle()
+        .on('error', $.util.log)
+        .pipe(vinylSource('carbo-inspector.bundle.js'))
+        .pipe(gulp.dest(SRC_DIR));
+});
+
+/**
  * Function for vulcanize task
  * We need the temporary directory to run vulcanize
  * as the routes we use in development are virtual
  */
 gulp.task('vulcanize:component', ['build-env'], function vulcanize() {
+
+    // Build process for post-vulcanized stuff
+    // Taken from polybuild.
+    // https://github.com/PolymerLabs/polybuild/blob/master/index.js
+    var vulcanizePipe = lazypipe()
+        // inline html imports, scripts and css
+        // also remove html comments
+        .pipe($.vulcanize, {
+            excludes: [
+                // polymer
+                path.join(TMP_DIR, '/polymer/polymer.html'),
+                // lodash
+                path.join(TMP_DIR, '/lodash/lodash.js')
+            ],
+            inlineScripts: true,
+            inlineCss: true,
+            stripComments: true
+        })
+        // remove whitespace from inline css
+        .pipe(polyclean.cleanCss)
+        .pipe(polyclean.uglifyJs);
+
+
     return gulp.src(VULCANIZE_OPTIONS.componentPath)
         .pipe(vulcanizePipe())
         .pipe(gulp.dest('.'))
@@ -171,6 +193,27 @@ gulp.task('vulcanize:component', ['build-env'], function vulcanize() {
  * Adds the injection script to the component
  */
 gulp.task('vulcanize:injector', ['build-env'], function () {
+
+    // Build process for post-vulcanized stuff
+    // Taken from polybuild.
+    // https://github.com/PolymerLabs/polybuild/blob/master/index.js
+    var vulcanizePipe = lazypipe()
+        // inline html imports, scripts and css
+        // also remove html comments
+        .pipe($.vulcanize, {
+            excludes: [
+                // polymer
+                path.join(TMP_DIR, '/polymer/polymer.html'),
+                // do not exclude lodash, as we are creating a 
+                // single bundle here
+            ],
+            inlineScripts: true,
+            inlineCss: true,
+            stripComments: true
+        })
+        // remove whitespace from inline css
+        .pipe(polyclean.cleanCss)
+        .pipe(polyclean.uglifyJs);
 
     return gulp.src([VULCANIZE_OPTIONS.componentPath, VULCANIZE_OPTIONS.injectorPath])
         .pipe($.concat('carbo-inspector.injector.html'))
@@ -220,11 +263,18 @@ gulp.task('serve', function () {
  */
 gulp.task('watch', function () {
 
-    // // Watch files for changes
+    // Watch LESS files for changes
     gulp.watch(LESS_DIR, ['less']);
 
+    // Watch JS files
+    gulp.watch(JS_DIR, ['javascript']);
+
     // Reload
-    var reloadDirs = JS_DIR.concat(HTML_DIR).concat(['carbo-inspector.injector.html']);
+    var reloadDirs = HTML_DIR
+        .concat([
+            'carbo-inspector.injector.html',
+            SRC_DIR + '/carbo-inspector.bundle.js'
+        ]);
     gulp.watch(reloadDirs, browserSync.reload);
 });
 

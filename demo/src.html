@@ -38,6 +38,12 @@
             padding: 30px 30px;
 
             background-color: navy;
+
+            border-radius: 40%;
+        }
+
+        #scroller {
+            height: 1000px;
         }
 
     </style>
@@ -59,17 +65,37 @@
         <div id="two-inner">inner</div>
     </div>
 
-    <div id="control"></div>
+    <div id="scroller"></div>
 
     <script type="text/javascript">
+
+        var baseHighlighterStyles = {
+            border: '3px red solid',
+        };
+
+        // Retrieve all elements
+        var twoInner = document.getElementById('two-inner');
+        var title    = document.querySelectorAll('h1')[0];
 
         window.addEventListener('WebComponentsReady', function () {
             
             window.inspector = document.getElementById('inspector');
+            
+            window.hlt = inspector.createHighlighter({
+                surfaceStyle: {
+                    border: '3px red solid',
+                },
+            });
 
-            var twoInner = document.getElementById('two-inner');
+            window.hlt2 = inspector.createHighlighter({
+                surfaceStyle: {
+                    border: '3px green dashed'
+                }
+            });
 
-            inspector.highlight(twoInner);
+            hlt2.highlight(title)
+
+            hlt.highlight(twoInner);
         });
     </script>
 </body>

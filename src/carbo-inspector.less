@@ -2,16 +2,19 @@
 
 }
 
-#elementlabel {
-    // position: absolute;
-//        text-transform: uppercase;
+.element-label {
     font-size: 10px;
     line-height: 14px;
     color: white;
     background-color: darkred;
     height: 14px;
     padding: 2px 4px;
-    // margin-top: -20px;
-    // margin-left: -3px
-}
 
+    float: left;
+
+    pointer-events: auto;
+
+    &:hover {
+        background-color: red;
+    }
+}

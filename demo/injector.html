@@ -65,7 +65,14 @@
 
             var inspector = window.carboInspector;
 
-            inspector.highlight(document.getElementById('two-inner'));
+            window.highlighter = inspector.createHighlighter({
+                state: 'active',
+                surfaceStyle: {
+                    border: '3px green dashed'
+                }
+            });
+
+            highlighter.highlight(document.getElementById('two-inner'));
         });
     </script>
 </body>

@@ -7,11 +7,29 @@
     <style include="carbo-inspector-styles"></style>
 
     <template>
-        <carbo-highlighter id="focus">
-            <div id="elementlabel" position="top"></div>
-        </carbo-highlighter>
+
+        <template is="dom-repeat" items="{{ _highlighters }}">
+            <carbo-highlighter 
+                id$="{{ item.id }}"
+                state="{{ item.state }}"
+                target="{{ item.target }}" 
+                surface-style="{{ item.surfaceStyle }}"
+            >
+                <div 
+                    class="element-label" 
+                    position="top"
+                >{{ item.elementLabel }}</div>
+                <div
+                    class="element-label"
+                    position="bottom"
+
+                    hidden$="{{ !item.owner }}"
+                >{{ item.owner }}</div>
+            </carbo-highlighter>
+        </template>
     </template>
     
-    <script src="carbo-inspector.js"></script>
+    <script src="../lodash/lodash.js"></script>
+    <script src="carbo-inspector.bundle.js"></script>
 
 </dom-module>
