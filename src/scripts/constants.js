@@ -7,7 +7,8 @@ exports.operationWhitelist = {
     'highlightElementAtPoint': true,
     'unHighlight': true,
     'getActiveElementData': true,
-    'scrollBy': true
+    'scrollBy': true,
+    'areFocusAndHoverTogether': true
 };
 
 /**

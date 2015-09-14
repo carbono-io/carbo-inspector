@@ -44,11 +44,11 @@ var FrameMessagingBehavior = {
 
                 // If there is a method to convert the object into 
                 // plain JSON object, do so.
-                res: res.toPlainObject ? res.toPlainObject() : res
+                res: (res !== undefined && res.toPlainObject) ? res.toPlainObject() : res
             }), '*');
 
         } else {
-            throw new Error('Operation %s is not available at inspector', operationName);
+            throw new Error('Operation %s is not available at inspector', request.operation);
         }
     },
 };

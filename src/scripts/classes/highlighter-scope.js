@@ -63,6 +63,35 @@ HighlighterScope.prototype.set = function (property, value) {
 };
 
 /**
+ * Retrieves data about the elemtn
+ * @return {Object} [description]
+ */
+HighlighterScope.prototype.getTargetData = function () {
+
+    var target = this.element.target;
+    var data;
+
+    if (target) {
+
+        var boundingRect = target.getBoundingClientRect();
+
+        data = {
+            tagName: target.tagName,
+            attributes: DOMHelpers.getAttributes(target),
+            computedStyle: DOMHelpers.getComputedStyle(target),
+            rect: {
+                top: boundingRect.top,
+                left: boundingRect.left,
+                width: boundingRect.width,
+                height: boundingRect.height,
+            },
+        };
+    }
+
+    return data;
+};
+
+/**
  * Converts the scope data into a plain object ready for 
  * JSON stringification
  * @return {Object}

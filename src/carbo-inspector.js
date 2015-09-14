@@ -27,12 +27,15 @@ var HighlighterScope = require('./scripts/classes/highlighter-scope');
  */
 var FrameMessagingBehavior = require('./scripts/behaviors/frame-messaging');
 var AnalysisBehavior       = require('./scripts/behaviors/analysis');
+var CanvasBehavior         = require('./scripts/behaviors/canvas');
 
 /**
  * Register the carbo-inspector element
  */
 Polymer({
     is: 'carbo-inspector',
+
+    behaviors: [FrameMessagingBehavior, AnalysisBehavior, CanvasBehavior],
 
     /**
      * Method called whenever the component is ready
@@ -76,25 +79,6 @@ Polymer({
         // Return the virtual highlighter object
         return _highlighter;
     },
-
-
-
-    /**
-     * Highlights the element at a given point
-     * @param {Object{ x: Number, y: Number}} 
-     *         point The point at which the element to be highlighted is
-     * @param {Boolean} force
-     */
-    highlightElementAtPoint: function (point, force) {
-        // get hovered component (Element under that position)
-        var element = document.elementFromPoint(point.x, point.y);
-        
-        if (element === this) {
-            this.unHighlight();
-        }
-        
-        this.highlight(element, force);
-    },
     
     /**
      * Scrolls the window
@@ -105,6 +89,4 @@ Polymer({
         // console.log('scroll x: %s, y: %s', deltaX, deltaY);
         window.scrollBy(deltaX, deltaY);
     },
-
-    behaviors: [FrameMessagingBehavior, AnalysisBehavior]
 });
