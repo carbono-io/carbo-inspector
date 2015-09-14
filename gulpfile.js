@@ -172,7 +172,9 @@ gulp.task('vulcanize:component', ['build-env'], function vulcanize() {
                 // polymer
                 path.join(TMP_DIR, '/polymer/polymer.html'),
                 // lodash
-                path.join(TMP_DIR, '/lodash/lodash.js')
+                path.join(TMP_DIR, '/lodash/lodash.js'),
+                // carbo-highlighter
+                path.join(TMP_DIR, '/carbo-highlighter/carbo-highlighter.html')
             ],
             inlineScripts: true,
             inlineCss: true,
