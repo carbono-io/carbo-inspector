@@ -8,7 +8,9 @@ exports.operationWhitelist = {
     'unHighlight': true,
     'getActiveElementData': true,
     'scrollBy': true,
-    'areFocusAndHoverTogether': true
+    'areFocusAndHoverTogether': true,
+    'activateLoading': true,
+    'deactivateLoading': true
 };
 
 /**
