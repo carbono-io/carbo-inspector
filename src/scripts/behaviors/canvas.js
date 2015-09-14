@@ -20,7 +20,14 @@ exports.attached = function () {
                 surfaceStyle: {
                     border: '3px solid green'
                 }
-            })
+            }),
+
+            loading: this.createHighlighter({
+                surfaceStyle: {
+                    backgroundColor: 'green',
+                    opacity: '0.3',
+                }
+            }),
         }
     };
 };
@@ -68,4 +75,15 @@ exports.areFocusAndHoverTogether = function () {
     var hover = this._canvas.highlighters.hover;
 
     return focus.target === hover.target;
+};
+
+exports.activateLoading = function () {
+
+    var hlt = this._canvas.highlighters.focus;
+
+    this.$.loading.highlight(hlt.target);
+};
+
+exports.deactivateLoading = function () {
+    this.$.loading.hide();
 };

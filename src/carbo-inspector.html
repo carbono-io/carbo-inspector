@@ -1,4 +1,5 @@
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-spinner/paper-spinner.html">
 <link rel="import" href="../carbo-highlighter/carbo-highlighter.html">
 <link rel="import" href="carbo-inspector-styles.html">
 
@@ -27,6 +28,12 @@
                 >{{ item.owner }}</div>
             </carbo-highlighter>
         </template>
+
+        <carbo-highlighter id="loading" state="inactive">
+            <div position="center">
+                <paper-spinner alt="Loading contacts list" active></paper-spinner>
+            </div>
+        </carbo-highlighter>
     </template>
     
     <script src="../lodash/lodash.js"></script>

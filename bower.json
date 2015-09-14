@@ -13,6 +13,7 @@
   "dependencies": {
     "carbo-highlighter": "https://github.com/carbono-io/carbo-highlighter.git",
     "lodash": "~3.10.1",
+    "paper-spinner": "PolymerElements/paper-spinner#~1.0.2",
     "polymer": "~1.1.2"
   },
   "devDependencies": {

@@ -281,7 +281,7 @@ gulp.task('watch', function () {
 });
 
 // Serve & watch
-gulp.task('develop', ['less', 'serve', 'watch']);
+gulp.task('develop', ['less', 'javascript', 'serve', 'watch']);
 gulp.task('default', ['develop']);
 
 ///////////////////////
