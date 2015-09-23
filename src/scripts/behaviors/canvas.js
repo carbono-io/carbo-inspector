@@ -1,7 +1,5 @@
 /**
  * Implements behaviors only valid for canvas usage.
- *
- * Kind of emergency :)
  */
 
 exports.attached = function () {
@@ -86,4 +84,35 @@ exports.activateLoading = function () {
 
 exports.deactivateLoading = function () {
     this.$.loading.hide();
+};
+
+var WHITELISTED_HIGHLIGHTER_OPERATIONS = {
+    getCSSRules: true,
+    getCSSSelectors: true,
+    getCSSProperties: true,
+    getCSSSelectorSpecificity: true
+};
+
+/**
+ * Executes an operation on a given highlighter
+ * @param  {String} highlighterId 
+ *     Identifier of the highlighter onto which the operation should be
+ *     executed
+ * @param  {String} operation
+ *     Name of the operation to be executed
+ * @param  {Array|*} args
+ *     Set of arguments to be passed to the operation
+ * @return {*}
+ *     Results of the operation. Whatever the operation returns.
+ */
+exports.executeHighlighterOperation = function (highlighterId, operation, args) {
+
+    // retrieve the highlighter object
+    var highlighter = this.getHighlighter(highlighterId) || this._canvas.highlighters.focus;
+
+    if (WHITELISTED_HIGHLIGHTER_OPERATIONS[operation]) {
+        return highlighter[operation].apply(highlighter, args);
+    } else {
+        throw new Error('Too bad: highlighter operation `' + operation + '` not whitelisted. :(')
+    }
 };

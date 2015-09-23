@@ -10,7 +10,8 @@ exports.operationWhitelist = {
     'scrollBy': true,
     'areFocusAndHoverTogether': true,
     'activateLoading': true,
-    'deactivateLoading': true
+    'deactivateLoading': true,
+    'executeHighlighterOperation': true
 };
 
 /**

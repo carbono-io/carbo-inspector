@@ -8,6 +8,10 @@ var highlightersNs = CONSTANTS.highlightersNs;
 
 var DOMHelpers = require('../aux/dom');
 
+
+// Load internal dependencies
+var CSSInspector = require('./css-inspector');
+
 /**
  * Class that represents the carbo-highlighter element
  * virtually.
@@ -19,10 +23,14 @@ function HighlighterScope(data, inspector) {
 
     this.id = _.uniqueId('highlighter_');
 
+    // keep reference to the inspector instance
     this.inspector = inspector;
 
     // Get all data
     _.assign(this, data);
+
+    // instantiate a CSSInspector
+    this._cssInspector = new CSSInspector();
 }
 
 /**
@@ -98,9 +106,11 @@ HighlighterScope.prototype.getTargetData = function () {
  */
 HighlighterScope.prototype.toPlainObject = function () {
 
-    return {
+    var obj = {
         id: this.id
     };
+    
+    return obj;
 };
 
 /**
@@ -115,6 +125,26 @@ Object.defineProperty(HighlighterScope.prototype, 'index', {
 
         return _.indexOf(_highlighters, this);
     },
+});
+
+
+
+/**
+ * CSSInspector proxy methods
+ */
+var CSS_INSPECTOR_PROXY_METHODS = [
+    'getCSSRules',
+    'getCSSSelectors',
+    'getCSSProperties',
+    'getCSSSelectorSpecificity',
+];
+
+CSS_INSPECTOR_PROXY_METHODS.forEach(function (methodName) {
+    HighlighterScope.prototype[methodName] = function (options) {
+        // set the target of the _cssInspector
+        this._cssInspector.setTarget(this.element.target);
+        return this._cssInspector[methodName](options);
+    };
 });
 
 module.exports = HighlighterScope;

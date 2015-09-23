@@ -1,0 +1,49 @@
+<html>
+<head>
+    <title></title>
+
+    <script>
+        window.Polymer = window.Polymer || {};
+        window.Polymer.dom = 'shadow';
+    </script>
+
+    <!-- webcomponents-lite -->
+    <script 
+        type="text/javascript" 
+        src="../../bower_components/webcomponentsjs/webcomponents-lite.js"
+    ></script>
+
+    <!-- component -->
+    <link rel="import" href="../../src/carbo-inspector.html">
+
+    <!-- import styles -->
+    <link rel="stylesheet" type="text/css" href="styles.css">
+
+</head>
+<body>
+
+    <iframe id="remote" src="iframe.html"></iframe>
+
+
+    <script src="execute-remote-operation.js"></script>
+    <script type="text/javascript">
+
+        var remote = document.getElementById('remote');
+
+        remote.addEventListener('load', function () {
+
+
+            executeRemoteOperation(
+                remote,
+                'executeHighlighterOperation',
+                ['remote-test', 'getCSSRules']
+            )
+            .then(function (rules) {
+                console.log(rules);
+            })
+            .done();
+
+        });
+    </script>
+</body>
+</html>

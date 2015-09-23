@@ -79,6 +79,19 @@ Polymer({
         // Return the virtual highlighter object
         return _highlighter;
     },
+
+    /**
+     * Retrieves an highlighter object
+     * @param  {String} highlighterId 
+     *     Identification of the highlighter
+     * @return {HighlighterScope}
+     *     Representation of the highlighter object
+     */
+    getHighlighter: function (highlighterId) {
+        return _.find(this[CONSTANTS.highlightersNs], function (hlt) {
+            return hlt.id === highlighterId;
+        });
+    },
     
     /**
      * Scrolls the window

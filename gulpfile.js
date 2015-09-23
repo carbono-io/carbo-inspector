@@ -68,6 +68,11 @@ gulp.task('clean', function clean() {
 
 /**
  * Prepares components for vulcanization
+ *
+ * Copies multiple directories to match paths described in source
+ * These paths are emulated by our development server
+ * and in order to be "browserifiable", they must correspond
+ * in the filesystem.
  */
 gulp.task('build-env', ['less', 'javascript'], function () {
 
@@ -80,7 +85,10 @@ gulp.task('build-env', ['less', 'javascript'], function () {
     var copyBOWER = gulp.src('bower_components/**/*')
         .pipe(gulp.dest(TMP_DIR));
 
-    return mergeStream(copySRC, copyBOWER);
+    var copyNonBOWER = gulp.src('non_bower_components/**/*')
+        .pipe(gulp.dest(TMP_DIR));
+
+    return mergeStream(copySRC, copyBOWER, copyNonBOWER);
 });
 
 /////////////////////
@@ -182,11 +190,14 @@ gulp.task('vulcanize:component', ['build-env'], function vulcanize() {
         })
         // remove whitespace from inline css
         .pipe(polyclean.cleanCss)
-        .pipe(polyclean.uglifyJs);
+        // .pipe(polyclean.uglifyJs);
 
 
     return gulp.src(VULCANIZE_OPTIONS.componentPath)
         .pipe(vulcanizePipe())
+        .on('error', function (e) {
+            $.util.log($.util.colors.red(e));
+        })
         .pipe(gulp.dest('.'))
         .pipe($.size({title: 'vulcanize' }));
 });
@@ -214,13 +225,16 @@ gulp.task('vulcanize:injector', ['build-env'], function () {
             stripComments: true
         })
         // remove whitespace from inline css
-        .pipe(polyclean.cleanCss)
-        .pipe(polyclean.uglifyJs);
+        // .pipe(polyclean.cleanCss)
+        // .pipe(polyclean.uglifyJs);
 
     return gulp.src([VULCANIZE_OPTIONS.componentPath, VULCANIZE_OPTIONS.injectorPath])
         .pipe($.concat('carbo-inspector.injector.html'))
         .pipe(gulp.dest(VULCANIZE_OPTIONS.baseTmpPath))
         .pipe(vulcanizePipe())
+        .on('error', function (e) {
+            $.util.log($.util.colors.red(e));
+        })
         .pipe(gulp.dest('.'))
         .pipe($.size({title: 'vulcanize:injector' }));
 });
@@ -252,9 +266,18 @@ gulp.task('serve', function () {
         },
 
         routes: {
-            '/bower_components': ['/', 'bower_components', 'demo/bower_components']
+            '/bower_components': [
+                '/',
+                'bower_components',
+                // Serve demo/bower_components so that we can have 
+                // demos inside folders, better packaged
+                'demo/bower_components'
+            ]
         },
-        serveStatic: ['bower_components'],
+
+        // Serve static files as if they were available at the
+        // root url path
+        serveStatic: ['bower_components', 'non_bower_components'],
         open: true,
         // tunnel: true
     });

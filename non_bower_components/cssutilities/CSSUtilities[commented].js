@@ -1751,11 +1751,33 @@ function CSSUtilities() {}
 				stylenodes[j].__css = styleblocks[j].split(/<\/([^:]+:)?style>/i)[0];
 			}
 			
+			//////////////////
+			//////////////////
+			//////////////////
+			// MODIFICATION //
+			//////////////////
+			//////////////////
+			//////////////////
+
 			//we don't need the styleblocks array anymore
 			//so we can delete it to save a bit of memory
 			//Every Little Helps :) (tm)
-			delete styleblocks;
+			// delete styleblocks;
 			
+			// `delete`
+			// "strict mode forbids deleting plain names. 
+			// delete name in strict mode is a syntax error"
+			// source: 
+			// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode
+			
+			//////////////////
+			//////////////////
+			//////////////////
+			// MODIFICATION //
+			//////////////////
+			//////////////////
+			//////////////////
+
 			//call the callback
 			oncomplete();
 		},

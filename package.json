@@ -16,6 +16,7 @@
   "devDependencies": {
     "browser-sync": "^2.8.2",
     "browserify": "^11.1.0",
+    "browserify-shim": "^3.8.10",
     "del": "^2.0.0",
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "^2.3.1",
@@ -36,5 +37,7 @@
     "run-sequence": "^1.1.2",
     "vinyl-source-stream": "^1.1.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "css": "^2.2.1"
+  }
 }

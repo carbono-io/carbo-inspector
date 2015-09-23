@@ -14,7 +14,8 @@
     "carbo-highlighter": "https://github.com/carbono-io/carbo-highlighter.git",
     "lodash": "~3.10.1",
     "paper-spinner": "PolymerElements/paper-spinner#~1.0.2",
-    "polymer": "~1.1.2"
+    "polymer": "~1.1.2",
+    "q": "1.4.1"
   },
   "devDependencies": {
     "carbo-form": "https://github.com/carbono-io/carbo-form.git",

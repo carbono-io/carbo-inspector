@@ -1,0 +1,91 @@
+<html>
+<head>
+    <title></title>
+
+    <script>
+        window.Polymer = window.Polymer || {};
+        window.Polymer.dom = 'shadow';
+    </script>
+
+    <!-- webcomponents-lite -->
+    <script 
+        type="text/javascript" 
+        src="../../bower_components/webcomponentsjs/webcomponents-lite.js"
+    ></script>
+
+    <!-- component -->
+    <link rel="import" href="../../src/carbo-inspector.html">
+
+    <!-- import styles -->
+    <link rel="stylesheet" type="text/css" href="styles.css">
+
+</head>
+<body>
+
+    <carbo-inspector id="inspector"></carbo-inspector>
+
+    <h1>test title</h1>
+    <div id="one">
+        content
+
+        <div>text content</div>
+    </div>
+    <div id="two">
+        second content
+
+        <div id="two-inner">
+            inner
+            <span id="inner-inner">inner-inner</span>
+        </div>
+    </div>
+
+    <div id="scroller"></div>
+
+    <script type="text/javascript">
+
+        var baseHighlighterStyles = {
+            border: '3px red solid',
+        };
+
+        // Retrieve all elements
+        var twoInner = document.getElementById('two-inner');
+        var innerInner = document.getElementById('inner-inner');
+        var title    = document.querySelectorAll('h1')[0];
+
+        window.addEventListener('WebComponentsReady', function () {
+            
+            window.inspector = document.getElementById('inspector');
+            
+            window.hlt = inspector.createHighlighter({
+                surfaceStyle: {
+                    border: '3px red solid',
+                },
+            });
+
+            hlt.highlight(innerInner);
+
+            // RULES
+            hlt.getCSSRules().then(function (rules) {
+                console.log('rules');
+                console.log(rules);
+            })
+            .done();
+            
+            // PROPERTIES
+            hlt.getCSSProperties().then(function (properties) {
+                console.log('properties');
+                console.log(properties);
+            })
+            .done();
+
+            // SELECTORS
+            hlt.getCSSSelectors().then(function (selectors) {
+                console.log('selectors');
+                console.log(selectors);
+            })
+            .done();
+
+        });
+    </script>
+</body>
+</html>

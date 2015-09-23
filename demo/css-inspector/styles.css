@@ -1,0 +1,38 @@
+div {
+    font-family: Helvetica;
+    font-size: 14px;
+}
+
+#one {
+    background-color: darkred;
+    color: white;
+
+    height: 300px;
+}
+
+#two {
+    background-color: darkgreen;
+    color: white;
+
+    width: 400px;
+    height: 300px;
+
+    position: relative;
+}
+
+#two-inner {
+    position: absolute;
+
+    bottom: 50%;
+    right: 40%;
+
+    padding: 30px 30px;
+
+    background-color: navy;
+
+    border-radius: 40%;
+}
+
+#scroller {
+    height: 1000px;
+}
