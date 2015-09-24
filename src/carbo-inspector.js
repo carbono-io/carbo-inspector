@@ -88,9 +88,15 @@ Polymer({
      *     Representation of the highlighter object
      */
     getHighlighter: function (highlighterId) {
-        return _.find(this[CONSTANTS.highlightersNs], function (hlt) {
+        var hlt = _.find(this[CONSTANTS.highlightersNs], function (hlt) {
             return hlt.id === highlighterId;
         });
+
+        if (!hlt) {
+            throw new Error('Could not find `' + highlighterId + '` highlighter.');
+        }
+
+        return hlt;
     },
     
     /**

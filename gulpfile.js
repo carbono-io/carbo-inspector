@@ -153,7 +153,7 @@ gulp.task('javascript', function () {
     // set up the browserify instance on a task basis
     var b = browserify({
         entries: SRC_DIR + '/carbo-inspector.js',
-        debug: true
+        debug: false
     });
 
     return b.bundle()
@@ -190,7 +190,7 @@ gulp.task('vulcanize:component', ['build-env'], function vulcanize() {
         })
         // remove whitespace from inline css
         .pipe(polyclean.cleanCss)
-        // .pipe(polyclean.uglifyJs);
+        .pipe(polyclean.uglifyJs);
 
 
     return gulp.src(VULCANIZE_OPTIONS.componentPath)
@@ -225,8 +225,8 @@ gulp.task('vulcanize:injector', ['build-env'], function () {
             stripComments: true
         })
         // remove whitespace from inline css
-        // .pipe(polyclean.cleanCss)
-        // .pipe(polyclean.uglifyJs);
+        .pipe(polyclean.cleanCss)
+        .pipe(polyclean.uglifyJs);
 
     return gulp.src([VULCANIZE_OPTIONS.componentPath, VULCANIZE_OPTIONS.injectorPath])
         .pipe($.concat('carbo-inspector.injector.html'))

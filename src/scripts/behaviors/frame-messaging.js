@@ -55,6 +55,6 @@ exports.handleFrameRequestMessage = function (event) {
             .done();
 
     } else {
-        throw new Error('Operation %s is not available at inspector', request.operation);
+        throw new Error('Operation `' + request.operation + '` is not available at inspector');
     }
 };

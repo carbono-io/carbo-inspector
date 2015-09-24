@@ -1,0 +1,76 @@
+body {
+    background-color: #ffffff;
+    font-family: 'Roboto', 'Noto', sans-serif;
+    font-size: 14px;
+    margin: 0;
+}
+
+/**
+ * ESTILOS BÁSICOS DO CARBO-FORM
+ * vvvvvvvv
+ */
+
+.form-commands {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    padding: 16px 0;
+}
+
+paper-button {
+    margin: 0 0 0 16px;
+}
+
+paper-button:first-child {
+    margin: 0 0 0 0px;
+}
+
+paper-button.purple {
+    background-color: #636;
+    color: #fff;
+}
+
+#test {
+    padding: 16px;
+}
+
+carbo-form[state="invalid"] #invalid-message,
+carbo-form[state="success"] #success-message,
+carbo-form[state="error"] #error-message {
+    opacity: 1;
+    color: white;
+
+    top: 50px;
+    bottom: 50px;
+    left: 50px;
+    right: 50px;
+}
+
+#formloading {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+
+paper-toast{
+    min-width: 100px;
+    right: 8px;
+    left: 8px;
+    bottom: 8px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+paper-toast span{
+    color: #eeff41;
+    cursor: pointer;
+}
+
+/**
+ * ^^^^^^
+ * ESTILOS BÁSICOS DO CARBO-FORM
+ */

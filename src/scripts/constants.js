@@ -4,14 +4,19 @@
  * @type {Object}
  */
 exports.operationWhitelist = {
-    'highlightElementAtPoint': true,
-    'unHighlight': true,
-    'getActiveElementData': true,
-    'scrollBy': true,
-    'areFocusAndHoverTogether': true,
-    'activateLoading': true,
-    'deactivateLoading': true,
-    'executeHighlighterOperation': true
+    // highlighter related
+    createHighlighter: true,
+    unHighlight: true,
+    getHighlighterTargetData: true,
+    highlightElementAtPoint: true,
+    highlightElementForSelector: true,
+
+    getActiveElementData: true,
+    scrollBy: true,
+    areFocusAndHoverTogether: true,
+    activateLoading: true,
+    deactivateLoading: true,
+    executeHighlighterOperation: true
 };
 
 /**

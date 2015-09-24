@@ -1,0 +1,73 @@
+<html>
+<head>
+    <title></title>
+
+    <script>
+        window.Polymer = window.Polymer || {};
+        window.Polymer.dom = 'shadow';
+    </script>
+
+    <!-- webcomponents-lite -->
+    <script 
+        type="text/javascript" 
+        src="../../bower_components/webcomponentsjs/webcomponents-lite.js"
+    ></script>
+
+    <!-- component -->
+    <link rel="import" href="../../src/carbo-inspector.html">
+
+    <!-- import styles -->
+    <link rel="stylesheet" type="text/css" href="styles.css">
+
+</head>
+<body>
+
+    <carbo-inspector id="inspector"></carbo-inspector>
+
+    <h1>test title</h1>
+    <div id="one">
+        content
+
+        <div>text content</div>
+    </div>
+    <div id="two">
+        second content
+
+        <div id="two-inner">
+            inner
+            <span id="inner-inner">inner-inner</span>
+        </div>
+
+        <div id="hidden"></div>
+    </div>
+
+    <div id="scroller"></div>
+
+    <script type="text/javascript">
+
+        function isElementVisible(element) {
+
+            if (element.tagName === 'SCRIPT') {
+                return false;
+            }
+
+            var display = window.getComputedStyle(element).display;
+            return display !== 'none' && display !== 'hidden';
+        }
+
+        window.addEventListener('WebComponentsReady', function () {
+            
+            window.inspector = document.getElementById('inspector');
+
+
+
+            // only visible elements
+            var visible = inspector.getElementNodeTreeData(document.body, isElementVisible);
+
+            console.log(visible);
+
+
+        });
+    </script>
+</body>
+</html>

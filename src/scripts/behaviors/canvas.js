@@ -9,18 +9,21 @@ exports.attached = function () {
 
         highlighters: {
             hover: this.createHighlighter({
+                id: 'hover',
                 surfaceStyle: {
                     border: '3px dashed green'
                 }
             }),
 
             focus: this.createHighlighter({
+                id: 'focus',
                 surfaceStyle: {
                     border: '3px solid green'
                 }
             }),
 
             loading: this.createHighlighter({
+                id: 'loading',
                 surfaceStyle: {
                     backgroundColor: 'green',
                     opacity: '0.3',
@@ -32,15 +35,31 @@ exports.attached = function () {
 
 /**
  * Highlights the element at a given point
+ * @param {String} highlighterId
  * @param {Object{ x: Number, y: Number}} 
  *         point The point at which the element to be highlighted is
- * @param {Boolean} force
  */
-exports.highlightElementAtPoint = function (highlighter, point, force) {
-    // get hovered component (Element under that position)
+exports.highlightElementAtPoint = function (highlighterId, point) {
+    // get element to be highlighted
     var element = document.elementFromPoint(point.x, point.y);
 
-    var hlt = this._canvas.highlighters[highlighter];
+    var hlt = this.getHighlighter(highlighterId);
+
+    hlt.highlight(element);
+};
+
+/**
+ * Highlights the element for a given selector.
+ * If the selector retrieves multiple elements, considers only the 
+ * first, as the `document.querySelector` implements.
+ * 
+ * @param  {String} highlighterId Identifier of the highlighter to be used
+ * @param  {String} selector      CSS Selector
+ */
+exports.highlightElementForSelector = function (highlighterId, selector) {
+    var element = document.querySelector(selector);
+
+    var hlt = this.getHighlighter(highlighterId);
 
     hlt.highlight(element);
 };
@@ -48,13 +67,25 @@ exports.highlightElementAtPoint = function (highlighter, point, force) {
 /**
  * Unhighlights
  */
-exports.unHighlight = function (highlighter) {
-    var hlt = this._canvas.highlighters[highlighter];
+exports.unHighlight = function (highlighterId) {
+    var hlt = this.getHighlighter(highlighterId);
 
     hlt.hide();
 };
 
 /**
+ * Retrieves information about the active element.
+ * @return {{tagName: String, attributes: Object, computedStyle: Object }Object} 
+ *         Data on the current active element.
+ */
+exports.getHighlighterTargetData = function (highlighterId) {
+    var hlt = this.getHighlighter(highlighterId);
+
+    return hlt.getTargetData();
+};
+
+/**
+ * DEPRECATE use getHighlighterTargetData instead
  * Retrieves information about the active element.
  * @return {{tagName: String, attributes: Object, computedStyle: Object }Object} 
  *         Data on the current active element.
@@ -87,6 +118,7 @@ exports.deactivateLoading = function () {
 };
 
 var WHITELISTED_HIGHLIGHTER_OPERATIONS = {
+    getTargetData: true,
     getCSSRules: true,
     getCSSSelectors: true,
     getCSSProperties: true,
