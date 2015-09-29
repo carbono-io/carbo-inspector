@@ -228,6 +228,8 @@ gulp.task('vulcanize:injector', ['build-env'], function () {
         // .pipe(polyclean.cleanCss)
         // .pipe(polyclean.uglifyJs);
 
+    var polymerImportRegExp = /<link\s+.*?href=".*?polymer\.html".*?>/;
+
     return gulp.src([VULCANIZE_OPTIONS.componentPath, VULCANIZE_OPTIONS.injectorPath])
         .pipe($.concat('carbo-inspector.injector.html'))
         .pipe(gulp.dest(VULCANIZE_OPTIONS.baseTmpPath))
@@ -235,6 +237,17 @@ gulp.task('vulcanize:injector', ['build-env'], function () {
         .on('error', function (e) {
             $.util.log($.util.colors.red(e));
         })
+        // Remove all imports referencing polymer
+        // so that the injected component does
+        // not try to load it's own polymer instance.
+        // Polymer requires to be loaded only once.
+        // Do removal at the end of the pipeline
+        // so that all references, including those written 
+        // in dependent components are removed.
+        .pipe($.replace(
+            polymerImportRegExp,
+            '<!-- removed polymer ref -->'
+        ))
         .pipe(gulp.dest('.'))
         .pipe($.size({title: 'vulcanize:injector' }));
 });

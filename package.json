@@ -28,6 +28,7 @@
     "gulp-notify": "^2.2.0",
     "gulp-polymerize-css": "0.0.0",
     "gulp-rename": "^1.2.2",
+    "gulp-replace": "^0.5.4",
     "gulp-size": "^2.0.0",
     "gulp-util": "^3.0.6",
     "gulp-vulcanize": "^6.0.1",
