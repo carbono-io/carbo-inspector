@@ -10,7 +10,7 @@ var DOMHelpers = require('../aux/dom');
 
 
 // Load internal dependencies
-var CSSInspector = require('./css-inspector');
+// var CSSInspector = require('./css-inspector');
 
 /**
  * Class that represents the carbo-highlighter element
@@ -30,7 +30,7 @@ function HighlighterScope(data, inspector) {
     _.assign(this, data);
 
     // instantiate a CSSInspector
-    this._cssInspector = new CSSInspector();
+    // this._cssInspector = new CSSInspector();
 }
 
 /**
@@ -86,7 +86,7 @@ HighlighterScope.prototype.getTargetData = function () {
         data = {
             tagName: target.tagName,
             attributes: DOMHelpers.getAttributes(target),
-            computedStyle: DOMHelpers.getComputedStyle(target),
+            // computedStyle: DOMHelpers.getComputedStyle(target),
             rect: {
                 top: boundingRect.top,
                 left: boundingRect.left,
@@ -140,19 +140,19 @@ Object.defineProperty(HighlighterScope.prototype, 'index', {
 /**
  * CSSInspector proxy methods
  */
-var CSS_INSPECTOR_PROXY_METHODS = [
-    'getCSSRules',
-    'getCSSSelectors',
-    'getCSSProperties',
-    'getCSSSelectorSpecificity',
-];
+// var CSS_INSPECTOR_PROXY_METHODS = [
+//     'getCSSRules',
+//     'getCSSSelectors',
+//     'getCSSProperties',
+//     'getCSSSelectorSpecificity',
+// ];
 
-CSS_INSPECTOR_PROXY_METHODS.forEach(function (methodName) {
-    HighlighterScope.prototype[methodName] = function (options) {
-        // set the target of the _cssInspector
-        this._cssInspector.setTarget(this.element.target);
-        return this._cssInspector[methodName](options);
-    };
-});
+// CSS_INSPECTOR_PROXY_METHODS.forEach(function (methodName) {
+//     HighlighterScope.prototype[methodName] = function (options) {
+//         // set the target of the _cssInspector
+//         this._cssInspector.setTarget(this.element.target);
+//         return this._cssInspector[methodName](options);
+//     };
+// });
 
 module.exports = HighlighterScope;
