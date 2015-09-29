@@ -5290,6 +5290,14 @@ HighlighterScope.prototype.getTargetData = function () {
 };
 
 /**
+ * Returns the data on 
+ * @return {Boolean} Whether the targetElement matches a given selector
+ */
+HighlighterScope.prototype.doesTargetMatchSelector = function (selector) {
+    return this.elements.target.matches(selector);
+};
+
+/**
  * Converts the scope data into a plain object ready for 
  * JSON stringification
  * @return {Object}

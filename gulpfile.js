@@ -225,8 +225,8 @@ gulp.task('vulcanize:injector', ['build-env'], function () {
             stripComments: true
         })
         // remove whitespace from inline css
-        .pipe(polyclean.cleanCss)
-        .pipe(polyclean.uglifyJs);
+        // .pipe(polyclean.cleanCss)
+        // .pipe(polyclean.uglifyJs);
 
     return gulp.src([VULCANIZE_OPTIONS.componentPath, VULCANIZE_OPTIONS.injectorPath])
         .pipe($.concat('carbo-inspector.injector.html'))
