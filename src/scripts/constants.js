@@ -10,6 +10,8 @@ exports.operationWhitelist = {
     getHighlighterTargetData: true,
     highlightElementAtPoint: true,
     highlightElementForSelector: true,
+    replaceInnerHTML: true,
+    getElementData: true,
 
     getActiveElementData: true,
     scrollBy: true,

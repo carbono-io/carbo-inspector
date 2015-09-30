@@ -148,3 +148,20 @@ exports.executeHighlighterOperation = function (highlighterId, operation, args) 
         throw new Error('Too bad: highlighter operation `' + operation + '` not whitelisted. :(')
     }
 };
+
+
+
+exports.replaceInnerHTML = function (selector, contents) {
+    var element = document.querySelector(selector);
+
+    Polymer.dom(element).innerHTML = contents;
+};
+
+
+exports.getElementData = function (selector, contents) {
+    var element = document.querySelector(selector);
+
+    return {
+        tagName: element.tagName
+    };
+};
