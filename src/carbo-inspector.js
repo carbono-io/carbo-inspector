@@ -27,6 +27,8 @@ var HighlighterScope = require('./scripts/classes/highlighter-scope');
  */
 var FrameMessagingBehavior = require('./scripts/behaviors/frame-messaging');
 var AnalysisBehavior       = require('./scripts/behaviors/analysis');
+var ManipulationBehavior   = require('./scripts/behaviors/manipulation');
+var HighlightingBehavior   = require('./scripts/behaviors/highlighting');
 var CanvasBehavior         = require('./scripts/behaviors/canvas');
 
 /**
@@ -35,7 +37,13 @@ var CanvasBehavior         = require('./scripts/behaviors/canvas');
 Polymer({
     is: 'carbo-inspector',
 
-    behaviors: [FrameMessagingBehavior, AnalysisBehavior, CanvasBehavior],
+    behaviors: [
+        FrameMessagingBehavior,
+        AnalysisBehavior,
+        ManipulationBehavior,
+        HighlightingBehavior,
+        CanvasBehavior,
+    ],
 
     /**
      * Method called whenever the component is ready

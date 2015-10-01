@@ -28,6 +28,8 @@ var HighlighterScope = require('./scripts/classes/highlighter-scope');
  */
 var FrameMessagingBehavior = require('./scripts/behaviors/frame-messaging');
 var AnalysisBehavior       = require('./scripts/behaviors/analysis');
+var ManipulationBehavior   = require('./scripts/behaviors/manipulation');
+var HighlightingBehavior   = require('./scripts/behaviors/highlighting');
 var CanvasBehavior         = require('./scripts/behaviors/canvas');
 
 /**
@@ -36,7 +38,13 @@ var CanvasBehavior         = require('./scripts/behaviors/canvas');
 Polymer({
     is: 'carbo-inspector',
 
-    behaviors: [FrameMessagingBehavior, AnalysisBehavior, CanvasBehavior],
+    behaviors: [
+        FrameMessagingBehavior,
+        AnalysisBehavior,
+        ManipulationBehavior,
+        HighlightingBehavior,
+        CanvasBehavior,
+    ],
 
     /**
      * Method called whenever the component is ready
@@ -110,7 +118,7 @@ Polymer({
         window.scrollBy(deltaX, deltaY);
     },
 });
-},{"./scripts/behaviors/analysis":3,"./scripts/behaviors/canvas":4,"./scripts/behaviors/frame-messaging":5,"./scripts/classes/highlighter-scope":6,"./scripts/constants":7}],2:[function(require,module,exports){
+},{"./scripts/behaviors/analysis":3,"./scripts/behaviors/canvas":4,"./scripts/behaviors/frame-messaging":5,"./scripts/behaviors/highlighting":6,"./scripts/behaviors/manipulation":7,"./scripts/classes/highlighter-scope":8,"./scripts/constants":9}],2:[function(require,module,exports){
 /**
  * Helper methods for manipulating DOMNodes
  */
@@ -165,12 +173,39 @@ exports.getAttributes = function (element) {
 },{}],3:[function(require,module,exports){
 'use strict';
 
+/**
+ * Implements analysis related methods
+ */
+
 var DOMHelpers = require('../aux/dom');
 
-exports.getElementAtPoint = function (point) {
+/**
+ * Retrieves data for an element
+ * @param  {CSSSelector|DOMElementNode} selector Either a css selector or an element
+ * @return {[type]}          [description]
+ */
+exports.getElementData = function (element) {
 
-}
+    // convert element into an element
+    element = (typeof element === 'string') ? document.querySelector(element) : element;
 
+    // get the boundingRect
+    var boundingRect = element.getBoundingClientRect();
+
+    var data = {
+        tagName: element.tagName,
+        attributes: DOMHelpers.getAttributes(element),
+        // computedStyle: DOMHelpers.getComputedStyle(element),
+        rect: {
+            top: boundingRect.top,
+            left: boundingRect.left,
+            width: boundingRect.width,
+            height: boundingRect.height,
+        },
+    };
+
+    return data;
+};
 
 // https://developer.mozilla.org/en/docs/Web/API/Node
 var NODE_TYPES = {
@@ -238,113 +273,14 @@ exports.getElementNodeTreeData = function (root, filterFn) {
 
 };
 },{"../aux/dom":2}],4:[function(require,module,exports){
+'use strict';
 /**
  * Implements behaviors only valid for canvas usage.
  */
 
-exports.attached = function () {
+console.log('canvas started');
 
-
-    this._canvas = {
-
-        highlighters: {
-            hover: this.createHighlighter({
-                id: 'hover',
-                surfaceStyle: {
-                    border: '3px dashed green'
-                }
-            }),
-
-            focus: this.createHighlighter({
-                id: 'focus',
-                surfaceStyle: {
-                    border: '3px solid green'
-                }
-            }),
-
-            loading: this.createHighlighter({
-                id: 'loading',
-                surfaceStyle: {
-                    backgroundColor: 'green',
-                    opacity: '0.3',
-                }
-            }),
-        }
-    };
-};
-
-/**
- * Highlights the element at a given point
- * @param {String} highlighterId
- * @param {Object{ x: Number, y: Number}} 
- *         point The point at which the element to be highlighted is
- */
-exports.highlightElementAtPoint = function (highlighterId, point) {
-    // get element to be highlighted
-    var element = document.elementFromPoint(point.x, point.y);
-
-    var hlt = this.getHighlighter(highlighterId);
-
-    hlt.highlight(element);
-};
-
-/**
- * Highlights the element for a given selector.
- * If the selector retrieves multiple elements, considers only the 
- * first, as the `document.querySelector` implements.
- * 
- * @param  {String} highlighterId Identifier of the highlighter to be used
- * @param  {String} selector      CSS Selector
- */
-exports.highlightElementForSelector = function (highlighterId, selector) {
-    var element = document.querySelector(selector);
-
-    var hlt = this.getHighlighter(highlighterId);
-
-    hlt.highlight(element);
-};
-
-/**
- * Unhighlights
- */
-exports.unHighlight = function (highlighterId) {
-    var hlt = this.getHighlighter(highlighterId);
-
-    hlt.hide();
-};
-
-/**
- * Retrieves information about the active element.
- * @return {{tagName: String, attributes: Object, computedStyle: Object }Object} 
- *         Data on the current active element.
- */
-exports.getHighlighterTargetData = function (highlighterId) {
-    var hlt = this.getHighlighter(highlighterId);
-
-    return hlt.getTargetData();
-};
-
-/**
- * DEPRECATE use getHighlighterTargetData instead
- * Retrieves information about the active element.
- * @return {{tagName: String, attributes: Object, computedStyle: Object }Object} 
- *         Data on the current active element.
- */
-exports.getActiveElementData = function (highlighter) {
-
-    var hlt = this._canvas.highlighters[highlighter];
-
-    return hlt.getTargetData();
-};
-
-
-exports.areFocusAndHoverTogether = function () {
-
-    var focus = this._canvas.highlighters.focus;
-    var hover = this._canvas.highlighters.hover;
-
-    return focus.target === hover.target;
-};
+// MAYBE DEPRECATE: 
 
 exports.activateLoading = function () {
 
@@ -357,54 +293,6 @@ exports.deactivateLoading = function () {
     this.$.loading.hide();
 };
 
-var WHITELISTED_HIGHLIGHTER_OPERATIONS = {
-    getTargetData: true,
-    getCSSRules: true,
-    getCSSSelectors: true,
-    getCSSProperties: true,
-    getCSSSelectorSpecificity: true
-};
-
-/**
- * Executes an operation on a given highlighter
- * @param  {String} highlighterId 
- *     Identifier of the highlighter onto which the operation should be
- *     executed
- * @param  {String} operation
- *     Name of the operation to be executed
- * @param  {Array|*} args
- *     Set of arguments to be passed to the operation
- * @return {*}
- *     Results of the operation. Whatever the operation returns.
- */
-exports.executeHighlighterOperation = function (highlighterId, operation, args) {
-
-    // retrieve the highlighter object
-    var highlighter = this.getHighlighter(highlighterId) || this._canvas.highlighters.focus;
-
-    if (WHITELISTED_HIGHLIGHTER_OPERATIONS[operation]) {
-        return highlighter[operation].apply(highlighter, args);
-    } else {
-        throw new Error('Too bad: highlighter operation `' + operation + '` not whitelisted. :(')
-    }
-};
-
-
-
-exports.replaceInnerHTML = function (selector, contents) {
-    var element = document.querySelector(selector);
-
-    Polymer.dom(element).innerHTML = contents;
-};
-
-
-exports.getElementData = function (selector, contents) {
-    var element = document.querySelector(selector);
-
-    return {
-        tagName: element.tagName
-    };
-};
 },{}],5:[function(require,module,exports){
 /**
  * Enables messaging between frames
@@ -466,7 +354,105 @@ exports.handleFrameRequestMessage = function (event) {
         throw new Error('Operation `' + request.operation + '` is not available at inspector');
     }
 };
-},{"../constants":7}],6:[function(require,module,exports){
+},{"../constants":9}],6:[function(require,module,exports){
+'use strict';
+
+/**
+ * Implements highlighting related methods
+ */
+
+/**
+ * Highlights the element at a given point
+ * @param {String} highlighterId
+ * @param {Object{ x: Number, y: Number}} 
+ *         point The point at which the element to be highlighted is
+ */
+exports.highlightElementAtPoint = function (highlighterId, point) {
+    // get element to be highlighted
+    var element = document.elementFromPoint(point.x, point.y);
+
+    var hlt = this.getHighlighter(highlighterId);
+
+    hlt.highlight(element);
+};
+
+/**
+ * Highlights the element for a given selector.
+ * If the selector retrieves multiple elements, considers only the 
+ * first, as the `document.querySelector` implements.
+ * 
+ * @param  {String} highlighterId Identifier of the highlighter to be used
+ * @param  {String} selector      CSS Selector
+ */
+exports.highlightElementForSelector = function (highlighterId, selector) {
+    var element = document.querySelector(selector);
+
+    var hlt = this.getHighlighter(highlighterId);
+
+    hlt.highlight(element);
+};
+
+/**
+ * Unhighlights
+ */
+exports.unHighlight = function (highlighterId) {
+    var hlt = this.getHighlighter(highlighterId);
+
+    hlt.hide();
+};
+
+/**
+ * Hides a given highlighter
+ * @param  {String} highlighterId Identifier for the highlighter
+ */
+exports.hideHighlighter = function (highlighterId) {
+    var hlt = this.getHighlighter(highlighterId);
+
+    hlt.hide();
+};
+
+/**
+ * Shows a given highlighter
+ * @param  {String} highlighterId Identifier for the highlighter
+ */
+exports.showHighlighter = function (highlighterId) {
+    var hlt = this.getHighlighter(highlighterId);
+
+    hlt.show();
+};
+
+/**
+ * Retrieves information about the active element.
+ * @return {{tagName: String, attributes: Object, computedStyle: Object }Object} 
+ *         Data on the current active element.
+ */
+exports.getHighlighterTargetData = function (highlighterId) {
+    var hlt = this.getHighlighter(highlighterId);
+
+    return this.getElementData(hlt.target);
+};
+
+},{}],7:[function(require,module,exports){
+'use strict';
+
+/**
+ * Implements application manipulation methods
+ */
+
+/**
+ * Replaces the innerHTML of an element selected by CSSSelector
+ * @param  {CSSSelector|DOMElementNode} element 
+ * @param  {HTMLString} contents 
+ */
+exports.replaceInnerHTML = function (element, contents) {
+
+    // convert element into an element
+    element = (typeof element === 'string') ? document.querySelector(element) : element;
+
+    Polymer.dom(element).innerHTML = contents;
+};
+
+},{}],8:[function(require,module,exports){
 /**
  * Class that is responsible for encapsulating scope 
  * for each of the highlighter elements within.
@@ -527,6 +513,17 @@ HighlighterScope.prototype.hide = function () {
     }
 
     this.element.hide();
+};
+
+/**
+ * Proxies the <carbo-highlighter>.show method
+ */
+HighlighterScope.prototype.show = function () {
+    if (!this.element) {
+        throw new Error('No element for HighlighterScope');
+    }
+
+    this.element.show();
 };
 
 /**
@@ -604,8 +601,6 @@ Object.defineProperty(HighlighterScope.prototype, 'index', {
     },
 });
 
-
-
 /**
  * CSSInspector proxy methods
  */
@@ -625,7 +620,7 @@ Object.defineProperty(HighlighterScope.prototype, 'index', {
 // });
 
 module.exports = HighlighterScope;
-},{"../aux/dom":2,"../constants":7}],7:[function(require,module,exports){
+},{"../aux/dom":2,"../constants":9}],9:[function(require,module,exports){
 /**
  * List of operations that can be called via window.postMessage
  * from the outer world.

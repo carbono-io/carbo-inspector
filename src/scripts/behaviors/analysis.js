@@ -1,11 +1,38 @@
 'use strict';
 
+/**
+ * Implements analysis related methods
+ */
+
 var DOMHelpers = require('../aux/dom');
 
-exports.getElementAtPoint = function (point) {
+/**
+ * Retrieves data for an element
+ * @param  {CSSSelector|DOMElementNode} selector Either a css selector or an element
+ * @return {[type]}          [description]
+ */
+exports.getElementData = function (element) {
 
-}
+    // convert element into an element
+    element = (typeof element === 'string') ? document.querySelector(element) : element;
 
+    // get the boundingRect
+    var boundingRect = element.getBoundingClientRect();
+
+    var data = {
+        tagName: element.tagName,
+        attributes: DOMHelpers.getAttributes(element),
+        // computedStyle: DOMHelpers.getComputedStyle(element),
+        rect: {
+            top: boundingRect.top,
+            left: boundingRect.left,
+            width: boundingRect.width,
+            height: boundingRect.height,
+        },
+    };
+
+    return data;
+};
 
 // https://developer.mozilla.org/en/docs/Web/API/Node
 var NODE_TYPES = {

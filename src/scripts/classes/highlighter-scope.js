@@ -61,6 +61,17 @@ HighlighterScope.prototype.hide = function () {
 };
 
 /**
+ * Proxies the <carbo-highlighter>.show method
+ */
+HighlighterScope.prototype.show = function () {
+    if (!this.element) {
+        throw new Error('No element for HighlighterScope');
+    }
+
+    this.element.show();
+};
+
+/**
  * Helper method to set data using polymer stuff
  */
 HighlighterScope.prototype.set = function (property, value) {
@@ -134,8 +145,6 @@ Object.defineProperty(HighlighterScope.prototype, 'index', {
         return _.indexOf(_highlighters, this);
     },
 });
-
-
 
 /**
  * CSSInspector proxy methods
