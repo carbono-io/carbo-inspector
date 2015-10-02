@@ -7,14 +7,11 @@
 var DOMHelpers = require('../aux/dom');
 
 /**
- * Retrieves data for an element
- * @param  {CSSSelector|DOMElementNode} selector Either a css selector or an element
- * @return {[type]}          [description]
+ * Auxiliary function that retrieves data for a given element
+ * @param  {DOMElementNode} element Element from which data should be read
+ * @return {POJO}           data object
  */
-exports.getElementData = function (element) {
-
-    // convert element into an element
-    element = (typeof element === 'string') ? document.querySelector(element) : element;
+function _getElementData(element) {
 
     // get the boundingRect
     var boundingRect = element.getBoundingClientRect();
@@ -32,6 +29,23 @@ exports.getElementData = function (element) {
     };
 
     return data;
+}
+
+/**
+ * Retrieves data for an array of elements
+ * @param  {CSSSelector|DOMElementNodeList|Array} elements
+ *         Either a css selector or an list of elements
+ * @return {Array -> ElementData}
+ *         Array of element data objects
+ */
+exports.getElementsData = function (elements) {
+
+    // convert elements into an elements array
+    elements = (typeof elements === 'string') ? document.querySelectorAll(elements) : elements;
+    elements = _.isArray(elements) ? elements : Array.prototype.slice.call(elements, 0);
+
+    // loop through elements and return array of data
+    return elements.map(_getElementData);
 };
 
 // https://developer.mozilla.org/en/docs/Web/API/Node
