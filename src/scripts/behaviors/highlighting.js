@@ -39,6 +39,9 @@ exports.highlightElementForSelector = function (highlighterId, selector) {
  * Unhighlights
  */
 exports.unHighlight = function (highlighterId) {
+
+    console.warn('<carbo-inspector>.unHighlight deprecated');
+
     var hlt = this.getHighlighter(highlighterId);
 
     hlt.hide();
@@ -66,11 +69,22 @@ exports.showHighlighter = function (highlighterId) {
 
 /**
  * Retrieves information about the active element.
+ * @param {String} highlighterId 
+ *        the id of the highlighter
+ * @param {String} childSelector
+ *        an optional selector for nodes within the highlighter target element
  * @return {{tagName: String, attributes: Object, computedStyle: Object }Object} 
  *         Data on the current active element.
  */
-exports.getHighlighterTargetData = function (highlighterId) {
+exports.getHighlighterTargetData = function (highlighterId, childSelector) {
     var hlt = this.getHighlighter(highlighterId);
 
-    return this.getElementData(hlt.target);
+    if (!hlt.target) {
+        return false;
+    }
+
+    var target = childSelector ? 
+        hlt.target.querySelector(childSelector) : hlt.target;
+
+    return this.getElementData(target);
 };

@@ -4,15 +4,24 @@
  * @type {Object}
  */
 exports.operationWhitelist = {
-    // highlighter related
+    // general
     createHighlighter: true,
-    unHighlight: true,
-    getHighlighterTargetData: true,
+
+    // highlighting
     highlightElementAtPoint: true,
     highlightElementForSelector: true,
+    unHighlight: true,
+    hideHighlighter: true,
+    showHighlighter: true,
+    getHighlighterTargetData: true,
+
+    // manipulation
     replaceInnerHTML: true,
+
+    // analysis
     getElementData: true,
 
+    // 
     getActiveElementData: true,
     scrollBy: true,
     areFocusAndHoverTogether: true,
