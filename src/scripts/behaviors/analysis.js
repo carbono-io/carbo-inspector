@@ -41,8 +41,18 @@ function _getElementData(element) {
 exports.getElementsData = function (elements) {
 
     // convert elements into an elements array
-    elements = (typeof elements === 'string') ? document.querySelectorAll(elements) : elements;
-    elements = _.isArray(elements) ? elements : Array.prototype.slice.call(elements, 0);
+    if (typeof elements === 'string') {
+        // elements is a CSSSelector
+        elements = document.querySelectorAll(elements);
+
+        // convert into array
+        elements = Array.prototype.slice.call(elements, 0);
+
+    } else if (!_.isArray(elements)) {
+        // probably NodeList
+        // https://developer.mozilla.org/en/docs/Web/API/NodeList
+        elements = Array.prototype.slice.call(elements, 0);
+    }
 
     // loop through elements and return array of data
     return elements.map(_getElementData);

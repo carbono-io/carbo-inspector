@@ -71,20 +71,36 @@ exports.showHighlighter = function (highlighterId) {
  * Retrieves information about the active element.
  * @param {String} highlighterId 
  *        the id of the highlighter
- * @param {String} childSelector
- *        an optional selector for nodes within the highlighter target element
  * @return {{tagName: String, attributes: Object, computedStyle: Object }Object} 
  *         Data on the current active element.
  */
-exports.getHighlighterTargetData = function (highlighterId, childSelector) {
+exports.getHighlighterTargetData = function (highlighterId) {
     var hlt = this.getHighlighter(highlighterId);
 
     if (!hlt.target) {
         return false;
     }
 
-    var target = childSelector ? 
-        hlt.target.querySelector(childSelector) : hlt.target;
+    return this.getElementsData([hlt.target])[0];
+};
 
-    return this.getElementData(target);
+/**
+ * Retrieves data for children of the highlighter target
+ * @param  {String} highlighterId
+ *         Identifier of the highlighter
+ * @param  {CSSSelector} childrenSelector
+ *         CSS Selector for the child tags
+ * @return {Array -> POJO}
+ *         Array of data objects
+ */
+exports.getHighlighterTargetChildrenData = function (highlighterId, childrenSelector) {
+    var hlt = this.getHighlighter(highlighterId);
+
+    if (!hlt.target) {
+        return [];
+    }
+
+    var children = hlt.target.querySelectorAll(childrenSelector);
+
+    return this.getElementsData(children);
 };

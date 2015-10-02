@@ -7,8 +7,9 @@
 /**
  * Activates the loading highlighter
  */
-exports.activateLoading = function () {
-    this.$.loading.highlight(hlt.target);
+exports.activateLoading = function (targetSelector) {
+    var element = document.querySelector(targetSelector);
+    this.$.loading.highlight(element);
 };
 
 /**

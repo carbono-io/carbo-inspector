@@ -14,12 +14,13 @@ exports.operationWhitelist = {
     hideHighlighter: true,
     showHighlighter: true,
     getHighlighterTargetData: true,
+    getHighlighterTargetChildrenData: true,
 
     // manipulation
     replaceInnerHTML: true,
 
     // analysis
-    getElementData: true,
+    getElementsData: true,
 
     // 
     getActiveElementData: true,
