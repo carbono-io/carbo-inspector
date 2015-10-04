@@ -186,20 +186,24 @@ var DOMHelpers = require('../aux/dom');
  */
 function _getElementData(element) {
 
-    // get the boundingRect
-    var boundingRect = element.getBoundingClientRect();
-
     var data = {
         tagName: element.tagName,
         attributes: DOMHelpers.getAttributes(element),
-        // computedStyle: DOMHelpers.getComputedStyle(element),
-        rect: {
+    };
+
+    if (element.getBoundingClientRect) {
+        // get the boundingRect
+        var boundingRect = element.getBoundingClientRect();
+
+        data.rect = {
             top: boundingRect.top,
             left: boundingRect.left,
             width: boundingRect.width,
             height: boundingRect.height,
-        },
-    };
+        };
+    }
+
+    // computedStyle: DOMHelpers.getComputedStyle(element),
 
     return data;
 }
@@ -247,26 +251,27 @@ var NODE_TYPES = {
     '12': 'NOTATION_NODE'
 };
 
+var ELEMENT_NODE_TYPES = [1];
+
 /**
  * Auxiliary function
  */
-function _getElementNodeTreeData(node, filterFn) {
+function _getElementTreeData(node, filterFn) {
 
-    if (node.nodeType !== 1) {
+    if (node.nodeType === 1) {
         // If node is not an element, return null
         return null;
     }
 
-    var nodeData = {
-        nodeType: node.nodeType,
-        tagName: node.tagName,
-        childNodes: []
-    };
+    var elementData = _getElementData(node);
+
+    // children
+    elementData.childNodes = [];
 
     // Use Polymer.dom API to normalize shady/shadow dom.
     Polymer.dom(node).childNodes.forEach(function (child) {
 
-        var childNodeData = _getElementNodeTreeData(child, filterFn);
+        var childNodeData = _getElementTreeData(child, filterFn);
 
         if (childNodeData) {
             // only push to childNodes if is not null
@@ -274,13 +279,13 @@ function _getElementNodeTreeData(node, filterFn) {
             // check if there is a filter function
             // pass the node to the filterFn
             if (!filterFn || filterFn(child)) {
-                nodeData.childNodes.push(childNodeData);
+                elementData.childNodes.push(childNodeData);
             } 
         }
 
     });
 
-    return nodeData;
+    return elementData;
 }
 
 /**
@@ -291,9 +296,11 @@ function _getElementNodeTreeData(node, filterFn) {
  *     should be in the tree or not.
  * @return {POJO}                  The tree in a plain js object (may be JSON.stringified)
  */
-exports.getElementNodeTreeData = function (root, filterFn) {
+exports.getElementTreeData = function (root, filterFn) {
 
-    return _getElementNodeTreeData(root, filterFn);
+    root = _.isString(root) ? document.querySelector(root) : root;
+
+    return _getElementTreeData(root, filterFn);
 
 };
 },{"../aux/dom":2}],4:[function(require,module,exports){
@@ -676,6 +683,8 @@ Object.defineProperty(HighlighterScope.prototype, 'index', {
 
 module.exports = HighlighterScope;
 },{"../aux/dom":2,"../constants":9}],9:[function(require,module,exports){
+'use strict';
+
 /**
  * List of operations that can be called via window.postMessage
  * from the outer world.
@@ -699,6 +708,7 @@ exports.operationWhitelist = {
 
     // analysis
     getElementsData: true,
+    getElementTreeData: true,
 
     // 
     getActiveElementData: true,

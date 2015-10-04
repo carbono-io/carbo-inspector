@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * List of operations that can be called via window.postMessage
  * from the outer world.
@@ -21,6 +23,7 @@ exports.operationWhitelist = {
 
     // analysis
     getElementsData: true,
+    getElementTreeData: true,
 
     // 
     getActiveElementData: true,
