@@ -258,7 +258,7 @@ var ELEMENT_NODE_TYPES = [1];
  */
 function _getElementTreeData(node, filterFn) {
 
-    if (node.nodeType === 1) {
+    if (node.nodeType !== 1) {
         // If node is not an element, return null
         return null;
     }
@@ -302,6 +302,12 @@ exports.getElementTreeData = function (root, filterFn) {
 
     return _getElementTreeData(root, filterFn);
 
+};
+
+exports.elementMatches = function (element, selector) {
+    element = _.isString(element) ? document.querySelector(element) : element;
+
+    return element.matches(selector);
 };
 },{"../aux/dom":2}],4:[function(require,module,exports){
 'use strict';
@@ -402,6 +408,10 @@ exports.handleFrameRequestMessage = function (event) {
 exports.highlightElementAtPoint = function (highlighterId, point) {
     // get element to be highlighted
     var element = document.elementFromPoint(point.x, point.y);
+
+    if (!element) {
+        return;
+    }
 
     var hlt = this.getHighlighter(highlighterId);
 
@@ -557,7 +567,7 @@ function HighlighterScope(data, inspector) {
  */
 HighlighterScope.prototype.highlight = function (element, options) {
 
-    if (!this.element) {
+    if (!element) {
         throw new Error('No element for HighlighterScope');
     }
 

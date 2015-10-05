@@ -328,6 +328,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
 </style>
+
+
 <style>
   /* IE 10 support for HTML5 hidden attr */
   [hidden] {
@@ -21047,7 +21049,7 @@ var ELEMENT_NODE_TYPES = [1];
  */
 function _getElementTreeData(node, filterFn) {
 
-    if (node.nodeType === 1) {
+    if (node.nodeType !== 1) {
         // If node is not an element, return null
         return null;
     }
@@ -21091,6 +21093,12 @@ exports.getElementTreeData = function (root, filterFn) {
 
     return _getElementTreeData(root, filterFn);
 
+};
+
+exports.elementMatches = function (element, selector) {
+    element = _.isString(element) ? document.querySelector(element) : element;
+
+    return element.matches(selector);
 };
 },{"../aux/dom":2}],4:[function(require,module,exports){
 'use strict';
@@ -21148,7 +21156,7 @@ exports.handleFrameRequestMessage = function (event) {
     // Thus we should whitelist the available methods
     var operationWhitelisted = CONSTANTS.operationWhitelist[request.operation]; 
 
-    if (operationWhitelisted || CONSTANTS.env === 'development') {
+    if (operationWhitelisted) {
         // Execute the operation and store the result
         var res = this[request.operation].apply(this, request.args);
 
@@ -21191,6 +21199,10 @@ exports.handleFrameRequestMessage = function (event) {
 exports.highlightElementAtPoint = function (highlighterId, point) {
     // get element to be highlighted
     var element = document.elementFromPoint(point.x, point.y);
+
+    if (!element) {
+        return;
+    }
 
     var hlt = this.getHighlighter(highlighterId);
 
@@ -21346,7 +21358,7 @@ function HighlighterScope(data, inspector) {
  */
 HighlighterScope.prototype.highlight = function (element, options) {
 
-    if (!this.element) {
+    if (!element) {
         throw new Error('No element for HighlighterScope');
     }
 
@@ -21473,8 +21485,6 @@ Object.defineProperty(HighlighterScope.prototype, 'index', {
 module.exports = HighlighterScope;
 },{"../aux/dom":2,"../constants":9}],9:[function(require,module,exports){
 'use strict';
-
-exports.env = 'development';
 
 /**
  * List of operations that can be called via window.postMessage
