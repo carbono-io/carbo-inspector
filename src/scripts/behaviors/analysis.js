@@ -24,7 +24,9 @@ function _getElementData(element) {
 
         data.rect = {
             top: boundingRect.top,
+            bottom: boundingRect.bottom,
             left: boundingRect.left,
+            right: boundingRect.right,
             width: boundingRect.width,
             height: boundingRect.height,
         };
