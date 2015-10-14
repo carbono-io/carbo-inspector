@@ -87,7 +87,7 @@ var ELEMENT_NODE_TYPES = [1];
  */
 function _getElementTreeData(node, filterFn) {
 
-    if (node.nodeType === 1) {
+    if (node.nodeType !== 1) {
         // If node is not an element, return null
         return null;
     }
@@ -131,4 +131,10 @@ exports.getElementTreeData = function (root, filterFn) {
 
     return _getElementTreeData(root, filterFn);
 
+};
+
+exports.elementMatches = function (element, selector) {
+    element = _.isString(element) ? document.querySelector(element) : element;
+
+    return element.matches(selector);
 };

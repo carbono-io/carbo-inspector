@@ -40,7 +40,7 @@ function HighlighterScope(data, inspector) {
  */
 HighlighterScope.prototype.highlight = function (element, options) {
 
-    if (!this.element) {
+    if (!element) {
         throw new Error('No element for HighlighterScope');
     }
 

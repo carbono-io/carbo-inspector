@@ -14,6 +14,10 @@ exports.highlightElementAtPoint = function (highlighterId, point) {
     // get element to be highlighted
     var element = document.elementFromPoint(point.x, point.y);
 
+    if (!element) {
+        return;
+    }
+
     var hlt = this.getHighlighter(highlighterId);
 
     hlt.highlight(element);

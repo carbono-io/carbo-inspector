@@ -260,7 +260,7 @@ var ELEMENT_NODE_TYPES = [1];
  */
 function _getElementTreeData(node, filterFn) {
 
-    if (node.nodeType === 1) {
+    if (node.nodeType !== 1) {
         // If node is not an element, return null
         return null;
     }
@@ -304,6 +304,12 @@ exports.getElementTreeData = function (root, filterFn) {
 
     return _getElementTreeData(root, filterFn);
 
+};
+
+exports.elementMatches = function (element, selector) {
+    element = _.isString(element) ? document.querySelector(element) : element;
+
+    return element.matches(selector);
 };
 },{"../aux/dom":2}],4:[function(require,module,exports){
 'use strict';
@@ -404,6 +410,10 @@ exports.handleFrameRequestMessage = function (event) {
 exports.highlightElementAtPoint = function (highlighterId, point) {
     // get element to be highlighted
     var element = document.elementFromPoint(point.x, point.y);
+
+    if (!element) {
+        return;
+    }
 
     var hlt = this.getHighlighter(highlighterId);
 
@@ -516,6 +526,26 @@ exports.replaceInnerHTML = function (element, contents) {
     Polymer.dom(element).innerHTML = contents;
 };
 
+exports.applyStyle = function (elements, property, value) {
+
+    // convert elements into an elements array
+    if (typeof elements === 'string') {
+        // elements is a CSSSelector
+        elements = document.querySelectorAll(elements);
+
+        // convert into array
+        elements = Array.prototype.slice.call(elements, 0);
+
+    } else if (!_.isArray(elements)) {
+        // probably NodeList
+        // https://developer.mozilla.org/en/docs/Web/API/NodeList
+        elements = Array.prototype.slice.call(elements, 0);
+    }
+
+    elements.forEach(function (el) {
+        el.style[property] = value;
+    });
+};
 },{}],8:[function(require,module,exports){
 /**
  * Class that is responsible for encapsulating scope 
@@ -559,7 +589,7 @@ function HighlighterScope(data, inspector) {
  */
 HighlighterScope.prototype.highlight = function (element, options) {
 
-    if (!this.element) {
+    if (!element) {
         throw new Error('No element for HighlighterScope');
     }
 
@@ -707,10 +737,12 @@ exports.operationWhitelist = {
 
     // manipulation
     replaceInnerHTML: true,
+    applyStyle: true,
 
     // analysis
     getElementsData: true,
     getElementTreeData: true,
+    elementMatches: true,
 
     // 
     getActiveElementData: true,

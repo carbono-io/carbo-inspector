@@ -20,10 +20,12 @@ exports.operationWhitelist = {
 
     // manipulation
     replaceInnerHTML: true,
+    applyStyle: true,
 
     // analysis
     getElementsData: true,
     getElementTreeData: true,
+    elementMatches: true,
 
     // 
     getActiveElementData: true,
