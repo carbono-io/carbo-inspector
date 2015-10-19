@@ -18,3 +18,15 @@ exports.activateLoading = function (targetSelector) {
 exports.deactivateLoading = function () {
     this.$.loading.hide();
 };
+
+
+
+
+exports.changeRoute = function(page){
+  window.router.setRoute( (page) ? "/"+page : undefined);
+};
+
+
+exports.reloadFrame = function(){
+    location.reload();
+};

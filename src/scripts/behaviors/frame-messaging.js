@@ -4,6 +4,7 @@
 
 var CONSTANTS = require('../constants');
 
+var IFRAME_OPERATION_PREFIX = 'canvas_iframe_operation_';
 /**
  * Method called whenever the component is ready
  */
@@ -58,3 +59,30 @@ exports.handleFrameRequestMessage = function (event) {
         throw new Error('Operation `' + request.operation + '` is not available at inspector');
     }
 };
+
+
+/**
+ * Executes and operation in the iframe parent.
+ *
+ * @param  {String} operation The name of the operation to be executed.
+ * @param  {Array|*} args     Array of arguments or single argument.
+ */
+exports.executeParentOperation = function (operation, args) {
+
+
+    var opid = _.uniqueId(IFRAME_OPERATION_PREFIX);
+
+    var message = JSON.stringify({
+        id: opid,
+        operation: operation,
+        args: args
+    });
+
+    if (typeof parent !== 'undefined') {
+      parent.postMessage(message,'*');
+    }
+
+    //TODO:Implementar retorno da mensagem do parent
+
+};
+
