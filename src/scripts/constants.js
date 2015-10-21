@@ -27,13 +27,16 @@ exports.operationWhitelist = {
     getElementTreeData: true,
     elementMatches: true,
 
-    // 
+    //
     getActiveElementData: true,
+    getBodySize: true,
     scrollBy: true,
     areFocusAndHoverTogether: true,
     activateLoading: true,
     deactivateLoading: true,
-    executeHighlighterOperation: true
+    executeHighlighterOperation: true,
+    changeRoute:true,
+    reloadFrame:true
 };
 
 /**

@@ -1,12 +1,12 @@
 /**
  * This component is responsible for highlighting the
- * components inside the application and communicating with the external 
- * world by means of the `window.postMessage` and 
+ * components inside the application and communicating with the external
+ * world by means of the `window.postMessage` and
  * `window.addEventListener('message')` methods.
  *
- * It has and implementation of a request-response model through that channel, 
+ * It has and implementation of a request-response model through that channel,
  * for more information, see handleFrameRequestMessage
- * 
+ *
  * @author Simon Fan, Pat Jenny, Lu Heuko
  */
 
@@ -55,6 +55,14 @@ Polymer({
          * @type {Array}
          */
         this[CONSTANTS.highlightersNs] = [];
+
+
+        //add a vent listener when dom of  #app element changes;
+        var app = document.querySelector('#app');
+         app.addEventListener('dom-change', function () {
+              this.executeParentOperation("domChange");
+         }.bind(this));
+
     },
 
     /**
@@ -90,7 +98,7 @@ Polymer({
 
     /**
      * Retrieves an highlighter object
-     * @param  {String} highlighterId 
+     * @param  {String} highlighterId
      *     Identification of the highlighter
      * @return {HighlighterScope}
      *     Representation of the highlighter object
@@ -106,14 +114,15 @@ Polymer({
 
         return hlt;
     },
-    
+
+
     /**
      * Scrolls the window
      * @param  {Number} deltaX
      * @param  {Number} deltaY
      */
     scrollBy: function (deltaX, deltaY) {
-        // console.log('scroll x: %s, y: %s', deltaX, deltaY);
+        console.log('scroll x: %s, y: %s', deltaX, deltaY);
         window.scrollBy(deltaX, deltaY);
     },
 });
