@@ -40,8 +40,6 @@ exports.deactivateLoading = function () {
 };
 
 
-
-
 exports.changeRoute = function(page){
   window.router.setRoute( (page) ? "/"+page : undefined);
 };
