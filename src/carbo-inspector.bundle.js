@@ -1,3 +1,4 @@
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 /**
  * The MIT License (MIT)
  * Copyright (c) 2015 Fabrica de Aplicativos S/A
@@ -18,16 +19,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
  * DEALINGS IN THE SOFTWARE.
  */
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 /**
  * This component is responsible for highlighting the
- * components inside the application and communicating with the external 
- * world by means of the `window.postMessage` and 
+ * components inside the application and communicating with the external
+ * world by means of the `window.postMessage` and
  * `window.addEventListener('message')` methods.
  *
- * It has and implementation of a request-response model through that channel, 
+ * It has and implementation of a request-response model through that channel,
  * for more information, see handleFrameRequestMessage
- * 
+ *
  * @author Simon Fan, Pat Jenny, Lu Heuko
  */
 
@@ -76,6 +76,14 @@ Polymer({
          * @type {Array}
          */
         this[CONSTANTS.highlightersNs] = [];
+
+
+        //add a vent listener when dom of  #app element changes;
+        var app = document.querySelector('#app');
+         app.addEventListener('dom-change', function () {
+              this.executeParentOperation("domChange");
+         }.bind(this));
+
     },
 
     /**
@@ -111,7 +119,7 @@ Polymer({
 
     /**
      * Retrieves an highlighter object
-     * @param  {String} highlighterId 
+     * @param  {String} highlighterId
      *     Identification of the highlighter
      * @return {HighlighterScope}
      *     Representation of the highlighter object
@@ -127,18 +135,40 @@ Polymer({
 
         return hlt;
     },
-    
+
+
     /**
      * Scrolls the window
      * @param  {Number} deltaX
      * @param  {Number} deltaY
      */
     scrollBy: function (deltaX, deltaY) {
-        // console.log('scroll x: %s, y: %s', deltaX, deltaY);
+        console.log('scroll x: %s, y: %s', deltaX, deltaY);
         window.scrollBy(deltaX, deltaY);
     },
 });
+
 },{"./scripts/behaviors/analysis":3,"./scripts/behaviors/canvas":4,"./scripts/behaviors/frame-messaging":5,"./scripts/behaviors/highlighting":6,"./scripts/behaviors/manipulation":7,"./scripts/classes/highlighter-scope":8,"./scripts/constants":9}],2:[function(require,module,exports){
+/**
+ * The MIT License (MIT)
+ * Copyright (c) 2015 Fabrica de Aplicativos S/A
+ * Permission is hereby granted, free of charge, to any person obtaining a
+ * copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following conditions:
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+ * DEALINGS IN THE SOFTWARE.
+ */
 /**
  * Helper methods for manipulating DOMNodes
  */
@@ -191,6 +221,26 @@ exports.getAttributes = function (element) {
     return attributes;
 };
 },{}],3:[function(require,module,exports){
+/**
+ * The MIT License (MIT)
+ * Copyright (c) 2015 Fabrica de Aplicativos S/A
+ * Permission is hereby granted, free of charge, to any person obtaining a
+ * copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following conditions:
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+ * DEALINGS IN THE SOFTWARE.
+ */
 'use strict';
 
 /**
@@ -332,6 +382,26 @@ exports.elementMatches = function (element, selector) {
     return element.matches(selector);
 };
 },{"../aux/dom":2}],4:[function(require,module,exports){
+/**
+ * The MIT License (MIT)
+ * Copyright (c) 2015 Fabrica de Aplicativos S/A
+ * Permission is hereby granted, free of charge, to any person obtaining a
+ * copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following conditions:
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+ * DEALINGS IN THE SOFTWARE.
+ */
 'use strict';
 
 /**
@@ -353,13 +423,43 @@ exports.deactivateLoading = function () {
     this.$.loading.hide();
 };
 
+
+exports.changeRoute = function(page){
+  window.router.setRoute( (page) ? "/"+page : undefined);
+};
+
+
+exports.reloadFrame = function(){
+    location.reload();
+};
 },{}],5:[function(require,module,exports){
+/**
+ * The MIT License (MIT)
+ * Copyright (c) 2015 Fabrica de Aplicativos S/A
+ * Permission is hereby granted, free of charge, to any person obtaining a
+ * copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following conditions:
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+ * DEALINGS IN THE SOFTWARE.
+ */
 /**
  * Enables messaging between frames
  */
 
 var CONSTANTS = require('../constants');
 
+var IFRAME_OPERATION_PREFIX = 'canvas_iframe_operation_';
 /**
  * Method called whenever the component is ready
  */
@@ -414,7 +514,55 @@ exports.handleFrameRequestMessage = function (event) {
         throw new Error('Operation `' + request.operation + '` is not available at inspector');
     }
 };
+
+
+/**
+ * Executes and operation in the iframe parent.
+ *
+ * @param  {String} operation The name of the operation to be executed.
+ * @param  {Array|*} args     Array of arguments or single argument.
+ */
+exports.executeParentOperation = function (operation, args) {
+
+
+    var opid = _.uniqueId(IFRAME_OPERATION_PREFIX);
+
+    var message = JSON.stringify({
+        id: opid,
+        operation: operation,
+        args: args
+    });
+
+    if (typeof parent !== 'undefined') {
+      parent.postMessage(message,'*');
+    }
+
+    //TODO:Implementar retorno da mensagem do parent
+
+};
+
+
 },{"../constants":9}],6:[function(require,module,exports){
+/**
+ * The MIT License (MIT)
+ * Copyright (c) 2015 Fabrica de Aplicativos S/A
+ * Permission is hereby granted, free of charge, to any person obtaining a
+ * copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following conditions:
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+ * DEALINGS IN THE SOFTWARE.
+ */
 'use strict';
 
 /**
@@ -527,6 +675,26 @@ exports.getHighlighterTargetChildrenData = function (highlighterId, childrenSele
 };
 
 },{}],7:[function(require,module,exports){
+/**
+ * The MIT License (MIT)
+ * Copyright (c) 2015 Fabrica de Aplicativos S/A
+ * Permission is hereby granted, free of charge, to any person obtaining a
+ * copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following conditions:
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+ * DEALINGS IN THE SOFTWARE.
+ */
 'use strict';
 
 /**
@@ -567,6 +735,26 @@ exports.applyStyle = function (elements, property, value) {
     });
 };
 },{}],8:[function(require,module,exports){
+/**
+ * The MIT License (MIT)
+ * Copyright (c) 2015 Fabrica de Aplicativos S/A
+ * Permission is hereby granted, free of charge, to any person obtaining a
+ * copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following conditions:
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+ * DEALINGS IN THE SOFTWARE.
+ */
 /**
  * Class that is responsible for encapsulating scope 
  * for each of the highlighter elements within.
@@ -735,6 +923,26 @@ Object.defineProperty(HighlighterScope.prototype, 'index', {
 
 module.exports = HighlighterScope;
 },{"../aux/dom":2,"../constants":9}],9:[function(require,module,exports){
+/**
+ * The MIT License (MIT)
+ * Copyright (c) 2015 Fabrica de Aplicativos S/A
+ * Permission is hereby granted, free of charge, to any person obtaining a
+ * copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following conditions:
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+ * DEALINGS IN THE SOFTWARE.
+ */
 'use strict';
 
 /**
@@ -764,13 +972,16 @@ exports.operationWhitelist = {
     getElementTreeData: true,
     elementMatches: true,
 
-    // 
+    //
     getActiveElementData: true,
+    getBodySize: true,
     scrollBy: true,
     areFocusAndHoverTogether: true,
     activateLoading: true,
     deactivateLoading: true,
-    executeHighlighterOperation: true
+    executeHighlighterOperation: true,
+    changeRoute:true,
+    reloadFrame:true
 };
 
 /**
