@@ -107,7 +107,11 @@ Polymer({
         // so that we can safely retrieve
         // the element immediately.
         Polymer.dom.flush();
-
+        //set label color
+        if(options.surfaceStyle.labelColor){
+          var labelElement = _highlighter.element.querySelector(".element-label");
+          labelElement.style["background-color"] = options.surfaceStyle.labelColor;
+        }
         // Select the highlighter element just created and
         // save reference at the _highlighter data object
         _highlighter.element = this.$$('#' + _highlighter.id);
